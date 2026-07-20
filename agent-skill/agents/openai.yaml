@@ -1,0 +1,6 @@
+interface:
+  display_name: "Spartan"
+  short_description: "Portable human-mediated agent handoffs"
+  default_prompt: "Use $spartan to coordinate this task through a durable repository-local handoff."
+policy:
+  allow_implicit_invocation: false
