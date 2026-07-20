@@ -81,7 +81,7 @@ Beyond the default mapping, choose by role and capability, not brand loyalty:
 - Continue in the current host when the next action is routine and no independent judgment is required.
 - Recommend a fresh session when prior reasoning could bias review.
 - Recommend another vendor when correlated assumptions are a material risk.
-- For a review or re-review, recommend a different host — ideally a different vendor — than the one that produced or last modified the work under review; self-review correlates blind spots. The human MAY override.
+- For a review or re-review, recommend a different host - ideally a different vendor - than the one that produced or last modified the work under review; self-review correlates blind spots. The human MAY override.
 - Recommend a native host feature only as a human choice. Do not invoke, monitor, resume, or depend on it.
 
 The handoff is delivered as two blocks: a "Recommended execution" block stating the recommended host with a one-phrase reason, one concrete model and effort level, and the invocation style (`$spartan`, `/spartan`, or direct prompt); then a clean prompt block naming the next role and action. The human decides the actual host, model, and invocation, and starts the round manually.

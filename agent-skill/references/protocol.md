@@ -95,7 +95,7 @@ A review round MUST record exactly one explicit verdict: `APPROVE`, `CHANGES`, o
 
 A reviewer SHOULD remain read-only unless the human explicitly authorizes changes for that round. A fresh-context or cross-vendor review is advisory independence, not a technically enforced guarantee.
 
-An independent review SHOULD run in a different host — and preferably a different vendor — than the one that produced or last modified the work under review, because a host reviewing its own output shares its blind spots. The same preference applies to a re-review after fixes: prefer a host other than the one that applied them. This preference is advisory; the human chooses the host and MAY override it.
+An independent review SHOULD run in a different host - and preferably a different vendor - than the one that produced or last modified the work under review, because a host reviewing its own output shares its blind spots. The same preference applies to a re-review after fixes: prefer a host other than the one that applied them. This preference is advisory; the human chooses the host and MAY override it.
 
 A task MAY become `completed` only when:
 
@@ -107,11 +107,13 @@ A task MAY become `completed` only when:
 
 Otherwise the task remains `active` or `blocked`.
 
+A task MAY also be closed as `completed` when its remaining work has been fully absorbed by another task; record which task absorbed it and treat the folded acceptance criteria as satisfied under that task.
+
 ## Handoff contract
 
 An incomplete, unblocked round MUST return exactly one short human-transferable prompt. It MUST:
 
-- reference `spartan/tasks/NNNN-<slug>.md`;
+- reference the current task's own `spartan/tasks/NNNN-<slug>.md`, never another task's file;
 - name one next role;
 - state one bounded action and its success condition;
 - require the same task file to be updated;
@@ -142,9 +144,13 @@ Run the relevant repository checks and update the same task file.
 Return only the next handoff, or a completion notice if no work remains.
 ```
 
+The next role is encoded in three places that MUST agree: the frontmatter `next_role`, the role and its reason in the "Recommended execution" block, and the `Act as <role>` line in the prompt block. When the next step changes, regenerate the whole handoff as a unit; never edit one part and leave the others stale.
+
+A handoff MUST point at the current task's own continuation and MUST NOT hand off to work that a different active task already tracks. When a task's remaining work is fully absorbed by another task, close it as `completed` and note which task absorbed it, rather than leaving it `active` with a handoff that points at another task's file.
+
 Spartan MUST NOT transmit or execute the handoff. The human chooses the next host and starts the next round.
 
-The recommended host is only a suggestion. When the human runs a round, that round SHOULD record, in its own outcome note (Work Completed or the review line), the host and model it actually used — even when they differ from the recommendation. This keeps both the recommended and the executed host visible and lets the different-host review preference be audited. It is a single current-snapshot note per round, not a per-round execution log.
+The recommended host is only a suggestion. When the human runs a round, that round SHOULD record, in its own outcome note (Work Completed or the review line), the host and model it actually used - even when they differ from the recommendation. This keeps both the recommended and the executed host visible and lets the different-host review preference be audited. It is a single current-snapshot note per round, not a per-round execution log.
 
 A completion notice MUST NOT leave the human without direction. It MUST state what was completed and its verdict or outcome, and then either:
 
