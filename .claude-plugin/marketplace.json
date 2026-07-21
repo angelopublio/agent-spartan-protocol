@@ -1,0 +1,20 @@
+{
+  "name": "agent-spartan-protocol",
+  "owner": {
+    "name": "Angelo Publio"
+  },
+  "description": "Marketplace for the Spartan portable handoff protocol skill.",
+  "plugins": [
+    {
+      "name": "spartan",
+      "source": "./agent-skill",
+      "description": "Portable human-mediated software-task handoffs through durable repository-local Markdown.",
+      "repository": "https://github.com/angelopublio/agent-spartan-protocol",
+      "keywords": [
+        "coding-agents",
+        "handoff",
+        "protocol"
+      ]
+    }
+  ]
+}

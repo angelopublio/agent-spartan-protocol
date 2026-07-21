@@ -73,11 +73,13 @@ Use this table to fill the "Model and effort" line with a concrete name. It ages
 | Codex | GPT-5.6 Luna | Fast and cheap: routine, narrow rounds |
 | Codex | GPT-5.3-Codex | Agentic multi-step coding rounds |
 | Codex | GPT-5.3-Codex-Spark | Real-time quick edits and pair programming (research preview, ChatGPT Pro) |
-| Claude Code | Fable 5 / Opus | Cockpit, planning, and code review at high effort |
-| Claude Code | Sonnet / Haiku | Routine or high-volume rounds |
+| Claude Code | Opus | Default for cockpit, planning, and code review at high effort |
+| Claude Code | Fable 5 | Reserve for `high-impact` risk or unusually complex/sophisticated reasoning; do not default to it over Opus |
+| Claude Code | Sonnet / Haiku | `routine` risk or high-volume rounds |
 
 Beyond the default mapping, choose by role and capability, not brand loyalty:
 
+- Match model tier to the task's assessed risk, not to the host's most capable model: `routine` defaults to Sonnet/Haiku (or the Codex Luna/Terra equivalent) even inside a round that also does cockpit or review work.
 - Continue in the current host when the next action is routine and no independent judgment is required.
 - Recommend a fresh session when prior reasoning could bias review.
 - Recommend another vendor when correlated assumptions are a material risk.

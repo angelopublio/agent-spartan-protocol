@@ -4,6 +4,10 @@
   "displayName": "Spartan",
   "version": "0.2.0",
   "description": "Portable human-mediated software-task handoffs through durable repository-local Markdown.",
+  "author": {
+    "name": "Angelo Publio",
+    "url": "https://github.com/angelopublio"
+  },
   "repository": "https://github.com/angelopublio/agent-spartan-protocol",
   "keywords": [
     "coding-agents",
