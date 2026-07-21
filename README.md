@@ -23,6 +23,7 @@ Spartan provides that contract:
 - Repository files, the current diff, and check results are the truth of implementation.
 - The task Markdown is the truth of handoff.
 - Chat history is disposable context.
+- `spartan/tasks/` remains public and version-controlled as living proof that the protocol can carry real work without hidden state.
 
 Phase and status fields describe the current snapshot. They are not an executable state machine. The task file is not an event log, database, audit ledger, or transcript.
 
@@ -32,6 +33,10 @@ The portable skill lives in [`agent-skill/`](agent-skill/):
 
 ```text
 agent-skill/
+|- .claude-plugin/
+|  `- plugin.json
+|- CHANGELOG.md
+|- version.txt
 |- SKILL.md
 |- agents/
 |  `- openai.yaml
@@ -43,6 +48,8 @@ agent-skill/
 ```
 
 `agents/openai.yaml` is optional Codex interface metadata. The behavior contract remains in portable Markdown shared by all hosts.
+
+The plugin manifest carries the package's passive Semantic Version. It does not add runtime behavior to the skill.
 
 Project-local discovery uses symbolic links to the same source folder:
 
@@ -133,6 +140,12 @@ Act as the next role recorded in the task, perform its one bounded next action, 
 
 The human must start every new host session and manually transfer every handoff. Spartan never opens or invokes another platform.
 
+## Releases
+
+The installable package uses Semantic Versioning, starting at `0.1.0`. Release automation lives in repository CI, outside `agent-skill/`; it prepares the changelog and package metadata, then creates the tag and GitHub Release after its release pull request is merged. See [`RELEASING.md`](RELEASING.md) for the operator flow.
+
+The `protocol` value copied into a newly created task is only a birth-stamp. Spartan performs no version negotiation or network check, and package releases never rewrite existing tasks or version an adopting repository.
+
 ## Non-goals
 
 This project does not provide:
@@ -144,7 +157,7 @@ This project does not provide:
 - automatic retries or correction loops;
 - secret scanners, sandboxes, or policy engines;
 - event ledgers, projections, patch digests, or transactional adoption;
-- automatic commit, push, pull request, merge, or deployment.
+- external actions initiated automatically by Spartan, such as commit, push, pull request, merge, or deployment. Repository release CI is separate from the portable protocol and its installable package.
 
 If a requirement needs those guarantees, it belongs in a separate runtime or workbench rather than this protocol.
 
@@ -158,7 +171,7 @@ If the answer is no, the feature has crossed from protocol into runtime.
 
 ## Current status
 
-Version `0.1` is a validated static package. The bootstrap received explicit approval from a fresh Codex verifier and an independent Claude Code reviewer; see the completed [`spartan/tasks/0001-bootstrap-v0-1.md`](spartan/tasks/0001-bootstrap-v0-1.md).
+Version `0.1.0` is the validated static-package baseline. The bootstrap received explicit approval from a fresh Codex verifier and an independent Claude Code reviewer; see the completed [`spartan/tasks/0001-bootstrap-v0-1.md`](spartan/tasks/0001-bootstrap-v0-1.md).
 
 The next phase is real-project dogfooding: one small reversible task completed in one host, one material change with fresh-context review, and one high-impact plan or review handed manually across vendors. Do not add protocol features until repeated trial evidence justifies them.
 

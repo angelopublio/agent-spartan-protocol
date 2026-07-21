@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "d49306c74e96cc30c3b4e75f4f561e60b8a3ca29",
+  "packages": {
+    "agent-skill": {
+      "release-type": "simple",
+      "component": "spartan",
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "generic",
+          "path": "assets/task-template.md"
+        }
+      ]
+    }
+  }
+}

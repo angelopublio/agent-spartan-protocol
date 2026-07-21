@@ -18,6 +18,11 @@ Keep the protocol static, host-neutral, human-mediated, and repository-local. Do
 - `spartan/tasks/*.md` is handoff truth.
 - Conversation history is ephemeral and must not be required for continuation.
 
+## Repository workflow
+
+- Before starting work, agents SHOULD run `git pull --ff-only` when `git status --short` shows a clean working tree. If the tree is not clean, preserve the existing changes and do not pull.
+- Every commit MUST follow Conventional Commits. Use the `feat`, `fix`, `docs`, or `chore` type, with an optional scope. Use `feat!:` or a `BREAKING CHANGE:` footer for a breaking change.
+
 ## Change discipline
 
 - Prefer concise Markdown instructions, references, and templates.

@@ -75,6 +75,8 @@ Controlled values:
 
 The artifact MUST contain the current objective, scope, constraints, acceptance criteria, decisions, work completed, evidence, review state, blockers, and next action. Its filename MUST use the immutable `NNNN-slug.md` creation-order convention, and its frontmatter MUST include `created_at` and `updated_at` dates.
 
+The frontmatter `protocol` value is a passive Semantic Version birth-stamp copied from the package template when the task is created. It has no runtime behavior and MUST NOT trigger version negotiation, network checks, migration, or rewrites of existing tasks. Spartan MUST NOT use this metadata to version or otherwise modify an adopting repository.
+
 The artifact MUST NOT become:
 
 - a conversation transcript;
