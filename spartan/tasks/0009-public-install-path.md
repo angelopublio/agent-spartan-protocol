@@ -2,12 +2,12 @@
 protocol: "0.2.0"
 id: public-install-path
 created_at: 2026-07-21
-status: active
-phase: verifying
+status: complete
+phase: complete
 task_type: implementation
 risk: material
-current_role: independent-reviewer
-next_role: human-operator
+current_role: human-operator
+next_role: none
 updated_at: 2026-07-21
 ---
 
@@ -48,7 +48,7 @@ A stranger can adopt Spartan in under two minutes: install via the Claude Code p
 - [x] README opens with a Quick start (one install command per host plus invoke examples) before the philosophy sections; symlink instructions preserved lower down.
 - [x] Sensitivity scan completed and findings reported without deletions.
 - [x] Cross-vendor review of the diff records an APPROVE verdict.
-- [ ] Post-push: `/plugin marketplace add angelopublio/agent-spartan-protocol` then `/plugin install spartan@agent-spartan-protocol` verified in a real Claude Code session (requires the operator commit/push round first).
+- [x] Post-push: `/plugin marketplace add angelopublio/agent-spartan-protocol` then `/plugin install spartan@agent-spartan-protocol` verified in a real Claude Code session (requires the operator commit/push round first).
 
 ## Decisions
 
@@ -57,6 +57,7 @@ A stranger can adopt Spartan in under two minutes: install via the Claude Code p
 - No `version` in the marketplace plugin entry: `plugin.json` carries `0.2.0` and is bumped by release-please; duplicating it would drift.
 - Omitted `$schema` from marketplace.json: no schemastore schema exists for the marketplace catalog (404), and Claude Code ignores the field.
 - README symlink instructions now use `SPARTAN_REPO="$(pwd)"` from the repo root instead of the owner's absolute local path.
+- Repository visibility changed from private to public (`gh repo edit ... --visibility public --accept-visibility-change-consequences`) on explicit operator authorization, given in chat, specifically so the "a stranger can adopt Spartan" objective could be verified for real rather than only for the owner's own authenticated access. This was a deliberate, human-approved, hard-to-reverse action, not an automated or default step.
 
 ## Work Completed
 
@@ -89,24 +90,30 @@ Findings:
 
 None.
 
+## Post-push verification (2026-07-21)
+
+- Human-operator round executed in Claude Code on Claude Sonnet 5.
+- Committed the approved diff (`.claude-plugin/marketplace.json`, `agent-skill/.claude-plugin/plugin.json`, `README.md`, `agent-skill/references/routing.md`, this task file) as `74b4ec3` after re-running checks: `python3 -m json.tool` on both manifests (valid), `git diff --check` (pass), `claude plugin validate .` and `claude plugin validate --strict agent-skill` (both "Validation passed").
+- User confirmed the push in chat; pushed `74b4ec3` to `origin/main` (`738a00e..74b4ec3 main -> main`).
+- First pass (flagged as invalid by the operator, correctly): ran `claude plugin marketplace add angelopublio/agent-spartan-protocol` and `claude plugin install spartan@agent-spartan-protocol` while the repository was still **private**. Both commands reported success and `claude plugin list` showed the plugin enabled, but this only proved the operator's own SSH-authenticated access worked — not that a stranger could install it. The operator caught this gap (`gh repo view ... --json visibility` confirmed `PRIVATE`) before the task was accepted as complete.
+- Operator explicitly authorized making the repository public to allow a real stranger-install test: `gh repo edit angelopublio/agent-spartan-protocol --visibility public --accept-visibility-change-consequences` succeeded; `gh repo view ... --json visibility` then returned `PUBLIC`.
+- Removed the prior marketplace/plugin state (`claude plugin marketplace remove agent-spartan-protocol`, `claude plugin uninstall spartan@agent-spartan-protocol --scope user`) to retest cleanly.
+- Verified anonymous access with a bare `git clone` outside the user's normal shell (`env -i PATH=/usr/bin:/bin`, no SSH agent) against the HTTPS URL: succeeded, confirming the repo content is fetchable without credentials.
+- Re-ran the install with `GIT_SSH_COMMAND="ssh -o BatchMode=yes -o IdentitiesOnly=yes -i /dev/null"` to force any SSH attempt to fail with no usable key, simulating a stranger with no SSH key registered on this repo:
+  - `claude plugin marketplace add angelopublio/agent-spartan-protocol`: logged `Cloning via SSH: git@github.com:...` then `SSH clone failed, retrying with HTTPS: https://github.com/...`, then `✔ Successfully added marketplace: agent-spartan-protocol (declared in user settings)`.
+  - `claude plugin install spartan@agent-spartan-protocol`: `✔ Successfully installed plugin: spartan@agent-spartan-protocol (scope: user)`.
+  - `claude plugin list`: shows `spartan@agent-spartan-protocol`, version 0.2.0, scope user, status "✔ enabled" under "Installed plugins" — this time under conditions that reproduce what a real stranger without SSH access would experience (automatic HTTPS fallback on a public repo).
+- Note (not a defect): `claude plugin list` also flags the operator's pre-existing personal symlink install at `~/.claude/skills/spartan` (the Development/fallback path from this same README, installed earlier on this machine) as shadowed by the plugin, since both use the name `spartan`. This is expected precedence behavior between the two install paths on one machine, not a hosted-install failure; the operator's own next step, if any, is to remove or rename the personal symlink to avoid the shadow warning locally.
+- **Correction recorded**: repository visibility (public vs. private) was not checked before the first "verified" claim in this round. The user (in Portuguese) challenged the result — "tem certeza que ele instalou usando o plugin?" given the repo wasn't public and a personal symlink already existed — which was the correct catch. The retest above addresses both concerns: it confirms the marketplace clone is a distinct, real clone (not the symlink) and that installation succeeds without the operator's own SSH credentials.
+
+## Outcome
+
+All acceptance criteria met. The public install path works end to end for Claude Code (marketplace + plugin install) and was previously confirmed for Codex/skills CLI. No further round is required for this task.
+
 ## Next Action
 
-The human operator completes the separate post-push acceptance check: commit and push the approved diff, then verify `/plugin marketplace add angelopublio/agent-spartan-protocol` followed by `/plugin install spartan@agent-spartan-protocol` in a real Claude Code session, recording the outcome in this task.
+None. Task complete.
 
 ## Next Handoff
 
-```text
-Recommended execution (human decides):
-- Host: Claude Code, live post-push install verification after the human operator publishes the approved diff
-- Model and effort: Claude Sonnet 5, medium effort
-- Invocation: `/spartan`, passing the prompt block below as the argument
-```
-
-```text
-Open `spartan/tasks/0009-public-install-path.md`.
-
-Act as human-operator. Commit and push the approved diff, then in a real Claude Code session run `/plugin marketplace add angelopublio/agent-spartan-protocol` and `/plugin install spartan@agent-spartan-protocol`; success is the hosted install completing with the `spartan` skill discoverable and the outcome recorded in this task file.
-Run the relevant repository checks and update the same task file.
-
-Return only the next handoff, or a completion notice if no work remains.
-```
+None — no work remains on this task.
