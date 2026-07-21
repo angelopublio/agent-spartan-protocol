@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [0.3.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.2.0...v0.3.0) (2026-07-21)
+
+
+### Features
+
+* **distribution:** add public install path via marketplace and skills CLI ([74b4ec3](https://github.com/angelopublio/agent-spartan-protocol/commit/74b4ec317937cbeec1cf7c3fddef9254af372b07))
+
 ## [0.2.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.1.0...v0.2.0) (2026-07-21)
 
 
