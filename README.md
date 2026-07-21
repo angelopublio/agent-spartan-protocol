@@ -17,7 +17,7 @@ Add the marketplace once, then install the plugin:
 /plugin install spartan@agent-spartan-protocol
 ```
 
-Invoke it in any project (plugin skills are namespaced):
+Invoke it in any project with `/spartan:spartan` (or simply `/spartan` when no other command uses that name):
 
 ```text
 /spartan:spartan
