@@ -162,6 +162,8 @@ The decisive test is deletion:
 
 If the answer is no, the feature has crossed from protocol into runtime.
 
+This is Steph Ango's [file over app](https://stephango.com/file-over-app), applied to models: the task file must outlive every host that touched it.
+
 ## Development / fallback install
 
 Working on the protocol itself, or on a host that cannot use the marketplace or the skills CLI? See [`docs/INSTALL-DEV.md`](docs/INSTALL-DEV.md) for the symlink-based installation.
