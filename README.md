@@ -194,7 +194,7 @@ Absolute project-local links are machine-specific and normally should not be com
 
 ## Current status
 
-Version `0.2.0` is the current release, tagged and published as a GitHub Release; see the completed [`spartan/tasks/0008-verify-first-hosted-release.md`](spartan/tasks/0008-verify-first-hosted-release.md). The automated release-please flow is configured in repository CI and is now unblocked; the next `feat`/`fix` change will be its first end-to-end exercise. The validated static-package baseline and its bootstrap approvals are recorded in [`spartan/tasks/0001-bootstrap-v0-1.md`](spartan/tasks/0001-bootstrap-v0-1.md).
+The current release is always the latest entry on the [GitHub Releases page](https://github.com/angelopublio/agent-spartan-protocol/releases); the packaged version is recorded in `agent-skill/version.txt` and bumped only by the release automation, which has been exercised end to end (see the completed [`spartan/tasks/0008-verify-first-hosted-release.md`](spartan/tasks/0008-verify-first-hosted-release.md)). The validated static-package baseline and its bootstrap approvals are recorded in [`spartan/tasks/0001-bootstrap-v0-1.md`](spartan/tasks/0001-bootstrap-v0-1.md).
 
 The next phase is real-project dogfooding: one small reversible task completed in one host, one material change with fresh-context review, and one high-impact plan or review handed manually across vendors. Do not add protocol features until repeated trial evidence justifies them.
 
