@@ -126,7 +126,9 @@ An incomplete, unblocked round MUST return exactly one short human-transferable 
 
 The "Recommended execution" block is advisory. The human MAY override any part of it. It MUST state the recommended host with a one-phrase reason, one concrete model and one concrete effort or reasoning level (for example "GPT-5 Codex, reasoning effort high" or "Claude Opus, extended thinking"), and the invocation style. Generic phrases such as "the best available model" do not satisfy the contract; when the exact model on the human's plan is unknown, name the most likely model and add one fallback phrase.
 
-The prompt block contains only the prompt itself, with no execution metadata, so the human can paste it unchanged: as the skill argument when invoking `$spartan` or `/spartan`, or directly when the target host has no skill support.
+The prompt block contains only the prompt itself, with no execution metadata, so the human can paste it unchanged: as the skill argument when invoking the host's skill token, or directly when the target host has no skill support.
+
+The invocation style MUST match the recommended host's own convention: `$spartan` is Codex's skill token, `/spartan` is Claude Code's (`/spartan:spartan` when installed under a plugin namespace), and a host without skill support receives the direct prompt. A handoff MUST NOT pair a recommended host with another host's invocation token.
 
 Recommended shape:
 
@@ -134,7 +136,7 @@ Recommended shape:
 Recommended execution (human decides):
 - Host: <Codex | Claude Code | other authenticated host, with a one-phrase reason>
 - Model and effort: <one concrete model, one concrete effort level, optional fallback phrase>
-- Invocation: <`$spartan` | `/spartan` | direct prompt>, passing the prompt block below as the argument
+- Invocation: <the recommended host's own token: `$spartan` for Codex, `/spartan` for Claude Code, direct prompt otherwise>, passing the prompt block below as the argument
 ```
 
 ```text

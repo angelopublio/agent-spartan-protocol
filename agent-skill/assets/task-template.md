@@ -73,7 +73,7 @@ Describe exactly one bounded action and its success condition.
 Recommended execution (human decides):
 - Host: <Codex | Claude Code | other authenticated host, with a one-phrase reason>
 - Model and effort: <one concrete model, one concrete effort level, optional fallback phrase>
-- Invocation: <`$spartan` | `/spartan` | direct prompt>, passing the prompt block below as the argument
+- Invocation: <the recommended host's own token: `$spartan` for Codex, `/spartan` for Claude Code, direct prompt otherwise>, passing the prompt block below as the argument
 ```
 
 ```text
