@@ -1,8 +1,10 @@
 # Agent Spartan Protocol
 
-> Spartan coordinates information, not processes.
+> Move work between coding agents without copying the whole conversation — or building an orchestrator.
 
-Agent Spartan Protocol is a portable, human-mediated handoff protocol for software work performed across authenticated coding-agent hosts. It uses one repository-local Markdown task artifact to preserve context and one concise prompt to transfer the next bounded action.
+**The human is the orchestrator. The repo is the memory. Markdown is the protocol.**
+
+Hand off coding tasks between Claude Code, Codex, and any agent — with one Markdown file and one paste. Agent Spartan Protocol is a portable, human-mediated handoff protocol for software work performed across authenticated coding-agent hosts: one repository-local Markdown task artifact preserves context, and one concise prompt transfers the next bounded action.
 
 The protocol is intentionally not an orchestrator. It does not launch models, manage credentials, keep a daemon alive, retry work, monitor sessions, coordinate concurrency, or adopt patches automatically.
 
