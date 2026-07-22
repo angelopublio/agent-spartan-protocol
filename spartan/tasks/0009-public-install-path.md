@@ -110,9 +110,15 @@ None.
 
 All acceptance criteria met. The public install path works end to end for Claude Code (marketplace + plugin install) and was previously confirmed for Codex/skills CLI. No further round is required for this task.
 
+## Post-task housekeeping (2026-07-21)
+
+- Human-operator round executed in Claude Code on Claude Sonnet 5.
+- The only remaining uncommitted state in the repository was the task 0010 artifact (`spartan/tasks/0010-claude-model-routing-by-risk.md`), unrelated to 0009's own scope; committed it as `7d1dae6` ("docs(spartan): record task 0010 - calibrate Claude model routing to risk") and pushed to `origin/main` (`2f64d6f..7d1dae6`).
+- `git status` after push: clean working tree, up to date with `origin/main`. No changes belonging to 0009 remained to commit — 0009's own diff was already committed and pushed as `74b4ec3` in the prior round.
+
 ## Next Action
 
-None. Task complete.
+None. Task complete; repository working tree clean and pushed.
 
 ## Next Handoff
 
