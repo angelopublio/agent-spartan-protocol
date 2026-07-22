@@ -97,7 +97,7 @@ Project-local discovery uses symbolic links to the same source folder:
 
 Codex uses the `.agents` link, Claude Code uses the `.claude` link, and compatible hosts may use the same canonical source. These links install no runtime and create no divergent skill copies.
 
-## Use Spartan inside a project
+## Use the Agent Spartan Protocol inside a project
 
 Start the coding host with the target project as its working folder. Spartan stores continuation state in that target project under `spartan/tasks/`; it does not store the target project's task state in this protocol repository. The `spartan/README.md` file explains this durable task namespace.
 
