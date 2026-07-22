@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [0.3.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.3.0...v0.3.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* **spartan:** bind invocation tokens to hosts ([1214edd](https://github.com/angelopublio/agent-spartan-protocol/commit/1214edd145cc61eb68e9ea3ce6ee9750d43cc11d))
+
 ## [0.3.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.2.0...v0.3.0) (2026-07-21)
 
 
