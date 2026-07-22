@@ -7,7 +7,7 @@ description: Coordinate portable, human-mediated software-task handoffs through 
 
 Coordinate information, not processes. Work in the currently authenticated host, preserve the continuation state in one task file, and give the human one concise English handoff when another round is needed.
 
-Read [references/protocol.md](references/protocol.md) before acting. Read [references/routing.md](references/routing.md) before assigning risk, the current role, or the next role. When creating a task, copy [assets/task-template.md](assets/task-template.md) to `spartan/tasks/NNNN-<slug>.md`, assign the next unused four-digit creation number, and replace every placeholder.
+Read [references/protocol.md](references/protocol.md) before acting. Read [references/routing.md](references/routing.md) before assigning risk, the current role, or the next role. When creating the `spartan/` directory for the first time in a target repository, also copy [assets/spartan-readme.md](assets/spartan-readme.md) to `spartan/README.md`. When creating a task, copy [assets/task-template.md](assets/task-template.md) to `spartan/tasks/NNNN-<slug>.md`, assign the next unused four-digit creation number, and replace every placeholder.
 
 ## Hard boundary
 
