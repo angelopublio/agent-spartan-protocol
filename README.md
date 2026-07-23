@@ -123,6 +123,8 @@ Codex uses the `.agents` link, Claude Code uses the `.claude` link, and compatib
 
 Start the coding host with the target project as its working folder. Spartan stores continuation state in that target project under `spartan/tasks/`; it does not store the target project's task state in this protocol repository. The `spartan/README.md` file explains this durable task namespace.
 
+When Spartan creates that first task in a repository whose root has neither an `AGENTS.md` nor a `CLAUDE.md`, the round also adds one advisory line suggesting you create an `AGENTS.md` (stack, dev/build/lint/test commands, conventions) plus a minimal `CLAUDE.md` that points to it, so later hosts start with shared instructions to read. The suggestion is tied to the repository's first task — it fires once, with no hidden flag — and Spartan never writes those files for you. You decide whether to add them.
+
 To continue an existing task in either host, reference its exact artifact instead of repeating its history:
 
 ```text

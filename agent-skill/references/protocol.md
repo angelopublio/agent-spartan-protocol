@@ -165,6 +165,8 @@ A suggested next step is a recommendation for a possible new round or task, not 
 
 When the completed work changed durable behavior or decisions, the completion notice SHOULD suggest a documentation round when one is identifiable. It SHOULD NOT make a documentation round a ritual for every completion.
 
+When a round creates a repository's first Spartan task and the repository root contains neither `AGENTS.md` nor `CLAUDE.md`, the round's final response SHOULD include one advisory recommendation that the human create an `AGENTS.md` covering stack, dev/build/lint/test commands, and conventions plus a minimal `CLAUDE.md` that points to it, without creating those files or tracking suppression state.
+
 For a completion notice, "the same two-block shape" reuses only the advisory "Recommended execution" block and the pasteable prompt block. It does not reuse the incomplete-task requirement to open and update the same task file. The prompt block MUST instead do one of the following:
 
 - For a suggested new task, direct the human-started next round to create a uniquely numbered artifact from `assets/task-template.md` in `spartan/tasks/`. It MUST NOT open, reopen, or update the completed artifact.
