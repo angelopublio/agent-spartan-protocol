@@ -1,4 +1,4 @@
-# Agent Spartan Protocol — task artifacts
+# Agent Spartan Protocol - task artifacts
 
 The [Agent Spartan Protocol](https://github.com/angelopublio/agent-spartan-protocol) uses this directory for repository-local, durable handoff state for software tasks. Each task lives in `tasks/` as one concise Markdown file named `NNNN-slug.md`, where the four-digit number records immutable creation order and the frontmatter records `created_at` and `updated_at`.
 

@@ -154,6 +154,8 @@ A handoff MUST point at the current task's own continuation and MUST NOT hand of
 
 Spartan MUST NOT transmit or execute the handoff. The human chooses the next host and starts the next round.
 
+A handoff MAY be executed by an external, human-installed tool; such a tool is outside this protocol and the protocol MUST NOT depend on it.
+
 The recommended host is only a suggestion. When the human runs a round, that round SHOULD record, in its own outcome note (Work Completed or the review line), the host and model it actually used - even when they differ from the recommendation. This keeps both the recommended and the executed host visible and lets the different-host review preference be audited. It is a single current-snapshot note per round, not a per-round execution log.
 
 A completion notice MUST NOT leave the human without direction. It MUST state what was completed and its verdict or outcome, and then either:
