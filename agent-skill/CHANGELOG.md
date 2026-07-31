@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [0.4.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.3.1...v0.4.0) (2026-07-31)
+
+
+### Features
+
+* **protocol:** reserve spartan directories and define design material ([c394a8d](https://github.com/angelopublio/agent-spartan-protocol/commit/c394a8d5b4a1bc0df458c3e01e94a66fb51a88da))
+
 ## [0.3.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.3.0...v0.3.1) (2026-07-22)
 
 
