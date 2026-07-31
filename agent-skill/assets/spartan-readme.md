@@ -4,6 +4,8 @@ The [Agent Spartan Protocol](https://github.com/angelopublio/agent-spartan-proto
 
 The task file, repository files, and check results are sufficient for a human-started next round. This directory does not contain runtime state, queues, logs, credentials, or automation.
 
+When a task settles something about how information is presented, its point-in-time design material - a screen brief, a layout choice, a question left to a designer - lives in `design/`. Standards that must stay true as the product changes are maintained documentation and belong to this repository's own design documentation instead, and nothing a design tool returns is stored here.
+
 `spartan/tasks/` is intentionally public and version-controlled. Completed tasks are living proof that the protocol remains understandable, reviewable, and manually continuable without private orchestration state; release housekeeping must not delete or hide them.
 
 ---

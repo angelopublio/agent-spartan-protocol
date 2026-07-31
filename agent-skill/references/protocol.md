@@ -8,12 +8,14 @@
 4. [Fundamental invariants](#fundamental-invariants)
 5. [Round lifecycle](#round-lifecycle)
 6. [Task artifact contract](#task-artifact-contract)
-7. [Review and completion](#review-and-completion)
-8. [Handoff contract](#handoff-contract)
-9. [Authorization and mutations](#authorization-and-mutations)
-10. [Allowed and forbidden capabilities](#allowed-and-forbidden-capabilities)
-11. [Failure and recovery](#failure-and-recovery)
-12. [Scope admission test](#scope-admission-test)
+7. [Repository layout](#repository-layout)
+8. [Design material](#design-material)
+9. [Review and completion](#review-and-completion)
+10. [Handoff contract](#handoff-contract)
+11. [Authorization and mutations](#authorization-and-mutations)
+12. [Allowed and forbidden capabilities](#allowed-and-forbidden-capabilities)
+13. [Failure and recovery](#failure-and-recovery)
+14. [Scope admission test](#scope-admission-test)
 
 ## Purpose
 
@@ -90,6 +92,85 @@ The artifact MUST NOT become:
 Stale detail SHOULD be compacted when it no longer helps the next round. Evidence SHOULD identify the command or observation and the outcome, not reproduce unbounded output.
 
 The artifact MUST NOT contain credentials, tokens, private keys, session material, or unnecessary personal data. When evidence could expose sensitive content, record a safe description and the outcome instead.
+
+## Repository layout
+
+Spartan writes only under `spartan/` in the target repository, except for the one explicitly
+authorized case in "Graduating a settled standard." Three names are reserved:
+
+- `spartan/tasks/` MUST hold task artifacts and nothing else.
+- `spartan/design/` MAY hold a task's design material, as defined below. It is optional; a
+  repository whose rounds settle nothing about presentation never creates it.
+- `spartan/docs/` MUST NOT be created. Documentation that the repository maintains and that must
+  stay true as the code changes belongs to the repository's own documentation location, written in
+  an explicitly authorized round.
+
+Any other output too large for the task artifact is a round deliverable and lives at
+`spartan/<kind>/<slug>.md`, where the producing task names `<kind>`. A round deliverable MUST be
+named in the producing task's Scope and referenced from its Work Completed. It is never handoff
+state: the task artifact remains handoff truth, and removing every deliverable MUST leave the task
+files understandable.
+
+## Design material
+
+A round MAY produce design material: what the task raises or settles about how information is
+presented - a brief for a screen, a layout or component choice, a state vocabulary, a question left
+open for a designer. It lives at `spartan/design/<slug>.md`.
+
+Design material is a round deliverable. Its producing task MUST name the design-material path in its
+Scope and reference it from its Work Completed. The design-material file MUST name the task artifact
+that produced it and MAY additionally cite decision tasks it draws on.
+
+A presentation decision a round makes stays in that task's Decisions by default. It becomes a file
+in `spartan/design/` only when it is too large for the task artifact to stay concise, or when it is
+addressed to a reader outside the round, such as a designer or a later implementation round.
+
+Design material is point-in-time. It is true as of the task that produced it and is not maintained
+afterwards. `spartan/design/` MUST stay flat, and design material MUST NOT be edited after its
+producing task completes; revised material is a new file with its own slug, produced by a new task.
+The directory carries no version suffix, index, or currency marker, because design material is
+reached from the task that produced or consumed it rather than by browsing.
+
+Design material MUST be readable without conversation history, MUST state already-settled decisions
+as settled and closed to reopening, MUST state what is out of scope, and MUST list the questions
+deliberately left open. It MUST NOT contain credentials or unnecessary personal data.
+
+`spartan/design/` is outbound only. What an external design host returns is product material
+governed by the target repository's own conventions, so this protocol does not name a location for
+it. Two rules apply instead: the returned design MUST NOT be stored anywhere under `spartan/`, and
+the task that consumes it MUST record in its Evidence where it landed, or how to reach it when it
+lives outside the repository.
+
+### Graduating a settled standard
+
+An interface standard that is settled and must stay true as the product changes - typography,
+sizing, colour, markup and class conventions, base layout, component patterns - is maintained
+documentation. It MUST NOT live under `spartan/`.
+
+When a round settles such a standard, it belongs in the repository's own design documentation. The
+round MUST write to the home the repository already uses, such as a component workshop, a
+design-token file, a style configuration, or an existing design document, and MUST NOT create a
+second home beside it. Only when the repository has no such home does the round propose creating
+one. This protocol names no path for it.
+
+Graduation is the only case in which a Spartan round writes outside `spartan/`, and it requires
+explicit human authorization for that round. A round MUST NOT create or update the outside file on
+its own initiative. It records the proposal in the task artifact and requests authorization through
+the existing routes for a missing authority: a blocking human question, or a handoff naming
+`human-operator` as next role.
+
+The request MUST state:
+
+- the proposed path outside `spartan/`;
+- whether it is a creation or an update, and for an update, which existing home was found;
+- what content graduates to it;
+- what stays in `spartan/design/`.
+
+The last two are the substance of the request: the human is approving a split between maintained
+documentation and point-in-time material, and cannot judge it without seeing both sides.
+
+Design material in `spartan/design/` SHOULD reference those standards rather than restate them, so
+that a standard has one copy that can be corrected once.
 
 ## Review and completion
 
