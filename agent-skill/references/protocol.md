@@ -209,7 +209,7 @@ The "Recommended execution" block is advisory. The human MAY override any part o
 
 The prompt block contains only the prompt itself, with no execution metadata, so the human can paste it unchanged: as the skill argument when invoking the host's skill token, or directly when the target host has no skill support.
 
-The invocation style MUST match the recommended host's own convention: `$spartan` is Codex's skill token, `/spartan` is Claude Code's (`/spartan:spartan` when installed under a plugin namespace), and a host without skill support receives the direct prompt. A handoff MUST NOT pair a recommended host with another host's invocation token.
+The invocation style MUST match what the recommended host supports, determined by capability rather than by host name. A host that exposes a skill token receives that token: `$spartan` for Codex, `/spartan` for Claude Code (`/spartan:spartan` when installed under a plugin namespace). A host that discovers skills from `SKILL.md` but exposes no invocation token receives the prompt with the skill named in it, which is how Cursor is invoked. Only a host without skill support receives the direct prompt. A handoff MUST NOT pair a recommended host with another host's invocation token, and MUST NOT route a skill-capable host to the direct prompt merely because it is not named here.
 
 Recommended shape:
 
@@ -217,7 +217,7 @@ Recommended shape:
 Recommended execution (human decides):
 - Host: <Codex | Claude Code | other authenticated host, with a one-phrase reason>
 - Model and effort: <one concrete model, one concrete effort level, optional fallback phrase>
-- Invocation: <the recommended host's own token: `$spartan` for Codex, `/spartan` for Claude Code, direct prompt otherwise>, passing the prompt block below as the argument
+- Invocation: <the recommended host's own convention: `$spartan` for Codex, `/spartan` for Claude Code, the skill named in the prompt for a host that discovers skills without exposing a token, direct prompt otherwise>, passing the prompt block below as the argument
 ```
 
 ```text

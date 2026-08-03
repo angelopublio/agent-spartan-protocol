@@ -51,8 +51,13 @@ The skill recommends the host; the human keeps the final choice. Default mapping
 |---|---|
 | Claude Code | Cockpit (task authoring and coordination with the human), planning, code review |
 | Codex | Plan review, implementation (coding), testing, browser and end-to-end verification (e.g. Playwright) |
+| Cursor | Optional third host: implementation (coding) and testing, which frees Codex for review |
 
 This mapping deliberately crosses vendors between producing and reviewing: Claude plans and Codex reviews the plan; Codex implements and Claude reviews the code. Deviate when capability, availability, or task context justifies it, and record the reason in the task file.
+
+Cursor is optional and belongs to a repository that has it available. When it takes implementation, the producing and reviewing hosts separate without the two-host alternation above: Claude Code plans, Cursor implements, and Codex reviews or verifies both.
+
+Independence is a property of model vendors, not of host names. Codex and Claude Code each fix their vendor by the host, but Cursor runs models from several vendors, so its vendor is set by the model it ran. Compare the model vendor of the producing round with the model vendor of the reviewing round: they are independent when the two vendors differ and correlated when they match, whatever the hosts are called. Composer is Cursor's own model, so it is a third vendor beside Anthropic and OpenAI; a Cursor round driving a Claude model correlates with Claude Code rounds while staying independent of Codex rounds, and a GPT model inverts that. Every round MUST record the model it actually ran, which is what lets a later reviewer make this comparison for any model, including one from a vendor not named here.
 
 The mapping is a default, not an exclusive assignment. Any role may run on either host when the preferred host cannot complete the round, for example:
 
@@ -62,9 +67,11 @@ The mapping is a default, not an exclusive assignment. Any role may run on eithe
 
 In that case the current round records what was refused or missing and why, and the handoff recommends the alternative host (for example, Codex taking a planning round) or `human-operator`. Rerouting redistributes the work; it never broadens what the human authorized.
 
-### Current model reference (verified July 2026)
+### Current model reference
 
-Use this table to fill the "Model and effort" line with a concrete name. It ages; verify against the human's plan and update this section when vendors ship new models.
+Use this table to fill the "Model and effort" line with a concrete name. It ages; verify against the human's plan and update this section when vendors ship new models. The Codex and Claude Code rows were last verified in July 2026; the Cursor row was added in August 2026. Date each row's own last check rather than restating one date for the table, so adding a row never backdates it.
+
+Not every host exposes an effort control. When it does not, the "Model and effort" line states that instead of naming a level, because a level the host cannot accept is as unusable to the human as the generic phrase the contract already forbids. Composer is the current case: it calibrates its own effort and offers no user-selectable level, so a Cursor round records `Composer, no user-selectable effort`.
 
 | Host | Model | Recommended use in Spartan rounds |
 |---|---|---|
@@ -76,6 +83,7 @@ Use this table to fill the "Model and effort" line with a concrete name. It ages
 | Claude Code | Opus | Default for cockpit, planning, and code review at high effort |
 | Claude Code | Fable 5 | Reserve for `high-impact` risk or unusually complex/sophisticated reasoning; do not default to it over Opus |
 | Claude Code | Sonnet / Haiku | `routine` risk or high-volume rounds |
+| Cursor | Composer | Implementation and testing rounds; Cursor's own model, so a third vendor beside Anthropic and OpenAI. No user-selectable effort: it calibrates its own (added August 2026) |
 
 Beyond the default mapping, choose by role and capability, not brand loyalty:
 
@@ -86,4 +94,4 @@ Beyond the default mapping, choose by role and capability, not brand loyalty:
 - For a review or re-review, recommend a different host - ideally a different vendor - than the one that produced or last modified the work under review; self-review correlates blind spots. The human MAY override.
 - Recommend a native host feature only as a human choice. Do not invoke, monitor, resume, or depend on it.
 
-The handoff is delivered as two blocks: a "Recommended execution" block stating the recommended host with a one-phrase reason, one concrete model and effort level, and the invocation style matched to that host (`$spartan` for Codex, `/spartan` for Claude Code, or a direct prompt for hosts without skill support); then a clean prompt block naming the next role and action. The human decides the actual host, model, and invocation, and starts the round manually.
+The handoff is delivered as two blocks: a "Recommended execution" block stating the recommended host with a one-phrase reason, one concrete model and effort level, and the invocation style matched to what that host supports (`$spartan` for Codex, `/spartan` for Claude Code, the skill named in the prompt for a host such as Cursor that discovers skills without exposing a token, or a direct prompt for a host without skill support); then a clean prompt block naming the next role and action. The human decides the actual host, model, and invocation, and starts the round manually.

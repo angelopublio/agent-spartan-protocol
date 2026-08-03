@@ -56,7 +56,7 @@ Write every persisted artifact and every handoff in English. For an incomplete t
 Recommended execution (human decides):
 - Host: <Codex | Claude Code | other authenticated host, with a one-phrase reason>
 - Model and effort: <one concrete model, one concrete effort level, optional fallback phrase>
-- Invocation: <the recommended host's own token: `$spartan` for Codex, `/spartan` for Claude Code, direct prompt otherwise>, passing the prompt block below as the argument
+- Invocation: <the recommended host's own convention: `$spartan` for Codex, `/spartan` for Claude Code, the skill named in the prompt for a host that discovers skills without exposing a token, direct prompt otherwise>, passing the prompt block below as the argument
 ```
 
 ```text
@@ -68,7 +68,7 @@ Run the relevant repository checks and update the same task file.
 Return only the next handoff, or a completion notice if no work remains.
 ```
 
-The invocation must match the recommended host: `$spartan` is Codex's skill token, `/spartan` is Claude Code's (`/spartan:spartan` when installed as a plugin), and a host without skill support gets the direct prompt. Never pair a host with another host's token.
+The invocation must match what the recommended host actually supports, not its name. Use the host's own skill token when it has one: `$spartan` for Codex, `/spartan` for Claude Code (`/spartan:spartan` when installed as a plugin). When the host discovers skills but exposes no token, name the skill in the prompt instead, as Cursor does. Only a host without skill support gets the direct prompt. Never pair a host with another host's token.
 
 Always deliver both blocks. The first is advisory and the human may override it; name one concrete model and one concrete effort level, never a generic phrase such as "best available model". The second contains only the prompt, with no execution metadata, so the human can paste it unchanged.
 
