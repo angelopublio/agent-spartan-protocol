@@ -1,5 +1,5 @@
 ---
-protocol: "0.4.0" # x-release-please-version
+protocol: "0.4.1" # x-release-please-version
 id: task-slug
 created_at: YYYY-MM-DD
 status: active
