@@ -125,6 +125,40 @@ Start the coding host with the target project as its working folder. Spartan sto
 
 When Spartan creates that first task in a repository whose root has neither an `AGENTS.md` nor a `CLAUDE.md`, the round also adds one advisory line suggesting you create an `AGENTS.md` (stack, dev/build/lint/test commands, conventions) plus a minimal `CLAUDE.md` that points to it, so later hosts start with shared instructions to read. The suggestion is tied to the repository's first task — it fires once, with no hidden flag — and Spartan never writes those files for you. You decide whether to add them.
 
+A human can also declare repository-specific host preferences in `AGENTS.md`. This guides future handoff recommendations; it never authorizes Spartan to start a host or round. One rule shapes any such declaration: a reviewer must not be the host that produced the work under review, because self-review correlates blind spots.
+
+With two hosts that rule cannot be satisfied by a fixed assignment, since the same host plans one round and implements another. Say so instead of pinning the reviewer:
+
+```markdown
+## Agent hosts
+
+| Role | Host |
+|---|---|
+| planner | Claude Code |
+| implementer | Codex |
+| reviewer, independent-reviewer, verifier | whichever host did not produce the work under review |
+
+Roles not listed here follow the Spartan package default.
+These are routing preferences, not execution authority. The human starts every round.
+```
+
+With three hosts a fixed assignment satisfies the rule on its own, because neither producer is the reviewer:
+
+```markdown
+## Agent hosts
+
+| Role | Host |
+|---|---|
+| planner | Claude Code |
+| implementer | Cursor |
+| reviewer, independent-reviewer, verifier | Codex |
+
+Roles not listed here follow the Spartan package default.
+These are routing preferences, not execution authority. The human starts every round.
+```
+
+Both examples map only Spartan's existing roles and name no model. The maintained model list ships with the skill in [`agent-skill/references/routing.md`](agent-skill/references/routing.md); name models in your own declaration only if you keep them current.
+
 To continue an existing task in either host, reference its exact artifact instead of repeating its history:
 
 ```text
