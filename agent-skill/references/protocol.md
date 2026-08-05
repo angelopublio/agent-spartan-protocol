@@ -79,6 +79,8 @@ The artifact MUST contain the current objective, scope, constraints, acceptance 
 
 The frontmatter `protocol` value is a passive Semantic Version birth-stamp copied from the package template when the task is created. It has no runtime behavior and MUST NOT trigger version negotiation, network checks, migration, or rewrites of existing tasks. Spartan MUST NOT use this metadata to version or otherwise modify an adopting repository.
 
+The frontmatter `handoff_id` and `next_handoff_id` fields hold the task's handoff identifier state: `handoff_id` is the high-water mark of the highest identifier this task has ever accepted, and `next_handoff_id` is the identifier of the envelope currently proposed in `Next Handoff`, or `none` when no proposal is outstanding. Both default to `none` on task creation. A handoff identifier is `HX-` followed by a digit run that is either exactly three digits or four-or-more digits whose first digit is not `0`, with a numeric value of at least 1 - `HX-001` through `HX-999`, then the unpadded widened form from `HX-1000` onward. `HX-000` and any non-canonical padding or short form are not valid identifiers. A task created before this field existed has neither field present and is a legacy artifact under the handoff contract's migration rule.
+
 The artifact MUST NOT become:
 
 - a conversation transcript;
@@ -230,6 +232,28 @@ Return only the next handoff, or a completion notice if no work remains.
 ```
 
 The next role is encoded in three places that MUST agree: the frontmatter `next_role`, the role and its reason in the "Recommended execution" block, and the `Act as <role>` line in the prompt block. When the next step changes, regenerate the whole handoff as a unit; never edit one part and leave the others stale.
+
+### Handoff identifier
+
+An identified task (both `handoff_id` and `next_handoff_id` present, see "Task artifact contract") carries a compact monotonic handoff identifier so a stale envelope or a stale pasted prompt is detectable rather than silently applied. A legacy task (neither field present) is unaffected and keeps its old envelope shape exactly as written; only the pre-existing three-place role agreement above applies to it.
+
+**Canonical envelope, scoped to an outstanding proposal.** A task has an outstanding proposal exactly when `next_handoff_id` is not `none`. While a proposal is outstanding, `## Next Handoff` MUST be the single canonical current envelope: exactly one such section, holding exactly two fenced blocks (advisory, then prompt), always regenerated whole. When there is no outstanding proposal (`next_handoff_id: none`), the section MUST NOT carry a handoff envelope: the round that clears the proposal MUST remove both fenced blocks in the same edit, and no `HX-NNN` occurrence MUST remain anywhere in the section. The section MAY still be omitted, reduced to a status line, or retained as a completion-notice suggestion (a "Recommended execution" and prompt pair introduced by a line beginning `Non-binding suggestion`, carrying no identifier and not opening the completed artifact).
+
+**Placement.** The identifier is encoded in three places that MUST agree with `next_handoff_id`, alongside the existing role agreement:
+
+| Value | Where it is written | Agreement test |
+|---|---|---|
+| Next role | frontmatter `next_role`; advisory `- Role:`; prompt `Act as <role>` | the three strings are equal |
+| Proposed handoff id | frontmatter `next_handoff_id`; advisory `- Handoff:`; prompt `(handoff <id>)` on the `Open` line | the three strings are equal |
+| Task file | the artifact's own filename; prompt `Open spartan/tasks/NNNN-slug.md` | the prompt path resolves to this artifact |
+
+**Increment semantics.** On task creation both fields are `none`. A newly issued handoff sets `next_handoff_id` to one more than the higher of `handoff_id` and the previous `next_handoff_id`; identifiers increase monotonically within a task and are never reused, decremented, or renumbered. The identifier names the pasteable prompt text: regenerating an outstanding proposal keeps `next_handoff_id` only while the prompt block stays textually identical to the persisted one; any change inside the prompt block (its `Open` path, its `Act as <role>` line, its bounded action or success condition, or any other wording) MUST issue a higher identifier. A correction confined to the advisory block keeps the identifier, because the human pastes only the prompt block. A receiving round that accepts a matching (or absent, see below) identifier sets `handoff_id` to it before doing anything else; if it then issues another handoff it advances `next_handoff_id`, and if it leaves no outstanding proposal it sets `next_handoff_id: none` and clears the envelope. Clearing a proposal MUST NOT lower the high-water mark: `handoff_id` MUST already equal the identifier being accepted before `next_handoff_id` is set to `none`.
+
+**Compare before change.** A round started from a pasted prompt that carries an identifier MUST compare it with the artifact's `next_handoff_id` before making any change. If they match, proceed. If they differ, stop: make no change to the repository or the artifact, report the pasted identifier, the artifact's current `next_handoff_id`, and the artifact's current `Next Action`, and recommend re-running from the artifact's own current envelope. If the pasted prompt carries no identifier while the artifact proposes one, do not hard-stop: proceed under the artifact's current envelope, which is acceptance of it, so set `handoff_id` to the artifact's `next_handoff_id` and record in Work Completed that the pasted prompt carried no identifier. If both are absent, proceed as before this field existed.
+
+**Write, then copy.** A round MUST write the envelope into the artifact first, then reproduce that persisted envelope verbatim in its final response, so the response is always a copy of the artifact rather than an independently authored text. Whether the human's chat actually matches the artifact at the moment of pasting, and which of several past responses they pasted, are not deterministically checkable; the receiving round's compare-before-change step is the practical detector, applied at the point where a stale paste would otherwise be silently applied.
+
+**Legacy migration.** A legacy task (neither field present) is valid as it stands and needs no retrofit; a round that only reads, completes, or blocks it without issuing a handoff adds nothing. The first round that issues a newly generated handoff on a legacy task upgrades it in one atomic edit: it adds both frontmatter fields (`handoff_id: none`, `next_handoff_id: HX-001`) and regenerates the whole `Next Handoff` section under these rules in the same edit. An edit that adds one field but leaves the old envelope lines standing, or the reverse, is a partial upgrade and MUST be finished, not left half-done.
 
 A handoff MUST point at the current task's own continuation and MUST NOT hand off to work that a different active task already tracks. When a task's remaining work is fully absorbed by another task, close it as `completed` and note which task absorbed it, rather than leaving it `active` with a handoff that points at another task's file.
 
