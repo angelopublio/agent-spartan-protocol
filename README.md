@@ -86,7 +86,7 @@ Spartan provides that contract:
 
 Phase and status fields describe the current snapshot. They are not an executable state machine. The task file is not an event log, database, audit ledger, or transcript.
 
-Newer task files also carry a compact `HX-NNN` handoff identifier so a receiving round can detect a stale pasted prompt instead of silently acting on it; older tasks without it remain valid unchanged.
+Newer task files also carry a compact `HX-NNN` handoff identifier so a receiving round can detect a stale pasted prompt instead of silently acting on it; older tasks without it remain valid unchanged. The full handoff contract ships with the skill in [`agent-skill/references/protocol.md`](agent-skill/references/protocol.md).
 
 ## Package
 
