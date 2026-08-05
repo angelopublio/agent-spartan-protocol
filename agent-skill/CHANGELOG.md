@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [0.5.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.4.1...v0.5.0) (2026-08-05)
+
+
+### Features
+
+* **spartan:** add handoff envelope identifier (HX-NNN) ([0943941](https://github.com/angelopublio/agent-spartan-protocol/commit/094394198f7864b15c6a467b12e48911bf8b70ea))
+
 ## [0.4.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.4.0...v0.4.1) (2026-08-03)
 
 
