@@ -6,11 +6,11 @@ status: active
 phase: verifying
 task_type: implementation
 risk: material
-current_role: independent-reviewer
+current_role: human-operator
 next_role: human-operator
 updated_at: 2026-08-07
-handoff_id: HX-002
-next_handoff_id: HX-003
+handoff_id: HX-003
+next_handoff_id: HX-004
 ---
 
 # Plugin skill discovery and marketplace display name
@@ -39,7 +39,7 @@ The cause was the package layout. `agent-skill/` was simultaneously the plugin r
 - Renaming the plugin `name` identifier, which would break existing installs and the `/spartan:spartan` token.
 - Renaming the `agent-skill/` directory itself; it is the release-please package key and renaming it mid-stream risks the release automation for no functional gain.
 - Rewriting path references inside `spartan/tasks/0001`-`0023`; those are point-in-time records, not maintained documentation.
-- Cutting a release. The second account only receives the fix after a new tagged version is published.
+- Confirming the fix on the second account's desktop app. That observation belongs to the owner and closes the last acceptance criterion.
 
 ## Constraints
 
@@ -75,7 +75,8 @@ The cause was the package layout. `agent-skill/` was simultaneously the plugin r
 - Repointed the project-local and personal symlinks for both hosts to `agent-skill/skills/spartan`.
 - Updated `README.md` (package tree, two reference links, symlink examples, plus a paragraph explaining the split), `AGENTS.md` (new change-discipline rule and two paths), `RELEASING.md` (two paths), `docs/INSTALL-DEV.md` (both symlink recipes and the canonical-folder sentence), and `docs/WHEN-TO-CREATE-A-SKILL.md` (one path).
 - Audited every skill symlink under the home directory. The only remaining links to the pre-move path belong to the marketplace's own clone of this repository at commit `b7ca22d`; they are this repository's committed project-local links and resolve themselves when the marketplace pulls the new commit. No other repository on the machine links the skill.
-- Executed by Claude Code running Opus 5.
+- The restructure and documentation rounds above were executed by Claude Code running Opus 5.
+- Released the reviewed work on the owner's explicit authorization: committed as `ca86623` under a `feat` type, pushed to `main`, inspected and merged the release proposal (#7), and confirmed the published release. Executed by Claude Code running Opus 5, acting as `human-operator` under HX-003.
 - Independently reviewed the restructure and both manifest changes: verified the moved payload, both manifests, `release-please-config.json`, the CI workflow, both symlink pairs, and every live document for stale pre-move paths. Executed by Claude Code running Sonnet 5. This is same-vendor (Anthropic) review, not the cross-vendor review the prior handoff recommended (Codex/GPT-5.6 Terra) — the human ran this round in Claude Code instead; recorded here per the routing reference's requirement that the actually-used host be visible even when it differs from the recommendation.
 
 ## Evidence
@@ -93,6 +94,11 @@ The cause was the package layout. `agent-skill/` was simultaneously the plugin r
 - `.agents/skills/spartan` and `.claude/skills/spartan` (project-local, `readlink`): both resolve to `../../agent-skill/skills/spartan`.
 - `~/.agents/skills/spartan` and `~/.claude/skills/spartan` (personal, `ls -la`): both resolve to the absolute new path.
 - `agent-skill/.DS_Store` is listed in `.gitignore` and untracked — not part of this change, not a residue of the move.
+- Release: commit `ca86623` on `main`; release proposal #7 (`chore(main): release 0.6.0`) inspected before merging and touching only the five expected files; merged as `b5fb227`; both `release-please.yml` runs completed successfully.
+- `gh release view v0.6.0`: published, not a draft, not a prerelease — https://github.com/angelopublio/agent-spartan-protocol/releases/tag/v0.6.0
+- The release updated `agent-skill/skills/spartan/assets/task-template.md` at its post-move path, which is direct proof that the corrected `extra-files` rule works; tasks created from now on are born with `protocol: "0.6.0"`.
+- Local repository fast-forwarded to `b5fb227`; `version.txt`, `plugin.json`, and the template all read 0.6.0, and tag `v0.6.0` is present locally.
+- Post-release re-check: both manifests still pass `claude plugin validate`, and all four symlinks still resolve `SKILL.md`.
 
 ## Review
 
@@ -109,23 +115,23 @@ None.
 
 ## Next Action
 
-The one remaining acceptance criterion — a marketplace install from a *published* version listing the skill and the new label in the Claude desktop app — cannot be exercised from this repository state: it needs a real release, and cutting a release is explicitly out of scope for implementation/review rounds and requires the human to authorize a commit and release. Human-operator: authorize a `feat`-type commit of the reviewed diff (per the Decisions section, so release-please bumps 0.5.0 → 0.6.0), let release-please cut the release, then reinstall/update the plugin from the marketplace on the second account and confirm the desktop app's "Habilidades" tab now lists the skill under the "Agent Spartan Protocol" label. Success condition: the last acceptance-criteria checkbox can be checked from direct observation.
+Everything this repository can settle is settled and released as v0.6.0. One acceptance criterion stays open because it is an observation only the owner can make: on the second account, update the plugin from the marketplace and confirm the "Habilidades" tab now lists the skill under the "Agent Spartan Protocol" label. Success condition: the last acceptance-criteria checkbox is checked from direct observation, after which this task completes. If the tab is still empty at 0.6.0, the `skills/` layout is ruled out and the next round investigates the desktop app's plugin loader rather than the package layout.
 
 ## Next Handoff
 
 ```text
 Recommended execution (human decides):
-- Host: Claude Code, the human authorizes the commit directly in the cockpit host already holding this reviewed diff
-- Model and effort: Sonnet 5, standard effort (no cross-vendor need for a human-authorization step)
+- Host: the owner's second account in the Claude desktop app, the only place the remaining criterion is observable
+- Model and effort: none applicable; this round is a human observation, not a model round
 - Role: human-operator
-- Handoff: HX-003
-- Invocation: `/spartan`, passing the prompt block below as the argument
+- Handoff: HX-004
+- Invocation: none; open Settings, then Plugins, and use the update control on the Agent Spartan Protocol entry
 ```
 
 ```text
-Open `spartan/tasks/0024-plugin-skill-discovery-and-display-name.md` (handoff HX-003).
+Open `spartan/tasks/0024-plugin-skill-discovery-and-display-name.md` (handoff HX-004).
 
-Act as human-operator. Authorize a `feat`-type commit of the reviewed restructure, wait for release-please to cut the release, then reinstall/update the plugin from the marketplace on the second account and confirm the desktop app lists the skill under the "Agent Spartan Protocol" label.
+Act as human-operator. On the second account, update the plugin from the marketplace to 0.6.0 and record whether the "Habilidades" tab lists the spartan skill and whether the entry is labelled "Agent Spartan Protocol".
 Run the relevant repository checks and update the same task file.
 
 Return only the next handoff, or a completion notice if no work remains.
