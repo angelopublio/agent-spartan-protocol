@@ -1,6 +1,8 @@
 # Development / fallback install (symlinks)
 
-Use this path when working on the protocol itself, or when a host cannot use the marketplace or the skills CLI. Clone the repository to a stable location and create one symbolic link per host; both links resolve to the same canonical `agent-skill/` folder.
+Use this path when working on the protocol itself, or when a host cannot use the marketplace or the skills CLI. Clone the repository to a stable location and create one symbolic link per host; both links resolve to the same canonical `agent-skill/skills/spartan/` folder.
+
+Link the skill folder, not the package root. `agent-skill/` is the distribution root and holds packaging only; `agent-skill/skills/spartan/` is what a host expects to find when it opens a skill directory.
 
 From the repository root:
 
@@ -10,8 +12,8 @@ SPARTAN_REPO="$(pwd)"
 mkdir -p "$HOME/.agents/skills"
 mkdir -p "$HOME/.claude/skills"
 
-ln -s "$SPARTAN_REPO/agent-skill" "$HOME/.agents/skills/spartan"
-ln -s "$SPARTAN_REPO/agent-skill" "$HOME/.claude/skills/spartan"
+ln -s "$SPARTAN_REPO/agent-skill/skills/spartan" "$HOME/.agents/skills/spartan"
+ln -s "$SPARTAN_REPO/agent-skill/skills/spartan" "$HOME/.claude/skills/spartan"
 ```
 
 Do not add `-f` to `ln`. If either destination already exists, inspect it before changing anything:
@@ -44,8 +46,8 @@ Use a project-local installation only when Spartan should be discoverable in one
 SPARTAN_REPO="/path/to/agent-spartan-protocol"
 
 mkdir -p .agents/skills .claude/skills
-ln -s "$SPARTAN_REPO/agent-skill" .agents/skills/spartan
-ln -s "$SPARTAN_REPO/agent-skill" .claude/skills/spartan
+ln -s "$SPARTAN_REPO/agent-skill/skills/spartan" .agents/skills/spartan
+ln -s "$SPARTAN_REPO/agent-skill/skills/spartan" .claude/skills/spartan
 ```
 
 Absolute project-local links are machine-specific and normally should not be committed. Avoid installing the same skill both personally and project-locally unless you are deliberately testing discovery behavior.

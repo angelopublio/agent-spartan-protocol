@@ -26,7 +26,8 @@ Keep the protocol static, host-neutral, human-mediated, and repository-local. Do
 ## Change discipline
 
 - Prefer concise Markdown instructions, references, and templates.
-- Keep `agent-skill/SKILL.md` preferably below 200 lines.
+- Keep the package root and the skill folder separate. `agent-skill/` holds packaging only (`.claude-plugin/plugin.json`, `CHANGELOG.md`, `version.txt`); everything the skill itself ships belongs under `agent-skill/skills/spartan/`. Do not add skill content at the package root: a plugin root reserves names such as `agents/`, `commands/`, `hooks/`, and `skills/`, and `skills/<name>/` is the layout every host discovers without a manifest hint.
+- Keep `agent-skill/skills/spartan/SKILL.md` preferably below 200 lines.
 - Do not add `src/`, a package manager manifest, runtime dependencies, or executable task tooling without an explicit decision to build a separate product.
 - Host-specific notes, if later justified, must remain optional and documentation-only.
-- A proposed feature belongs here only when it passes every scope test in `agent-skill/references/protocol.md`.
+- A proposed feature belongs here only when it passes every scope test in `agent-skill/skills/spartan/references/protocol.md`.

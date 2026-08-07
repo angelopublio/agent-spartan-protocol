@@ -86,11 +86,11 @@ Spartan provides that contract:
 
 Phase and status fields describe the current snapshot. They are not an executable state machine. The task file is not an event log, database, audit ledger, or transcript.
 
-Newer task files also carry a compact `HX-NNN` handoff identifier so a receiving round can detect a stale pasted prompt instead of silently acting on it; older tasks without it remain valid unchanged. The full handoff contract ships with the skill in [`agent-skill/references/protocol.md`](agent-skill/references/protocol.md).
+Newer task files also carry a compact `HX-NNN` handoff identifier so a receiving round can detect a stale pasted prompt instead of silently acting on it; older tasks without it remain valid unchanged. The full handoff contract ships with the skill in [`agent-skill/skills/spartan/references/protocol.md`](agent-skill/skills/spartan/references/protocol.md).
 
 ## Package
 
-The portable skill lives in [`agent-skill/`](agent-skill/):
+The package root is [`agent-skill/`](agent-skill/), and the portable skill itself lives one level down in [`agent-skill/skills/spartan/`](agent-skill/skills/spartan/):
 
 ```text
 agent-skill/
@@ -98,25 +98,30 @@ agent-skill/
 |  `- plugin.json
 |- CHANGELOG.md
 |- version.txt
-|- SKILL.md
-|- agents/
-|  `- openai.yaml
-|- references/
-|  |- protocol.md
-|  `- routing.md
-`- assets/
-   `- task-template.md
+`- skills/
+   `- spartan/
+      |- SKILL.md
+      |- agents/
+      |  `- openai.yaml
+      |- references/
+      |  |- protocol.md
+      |  `- routing.md
+      `- assets/
+         |- spartan-readme.md
+         `- task-template.md
 ```
+
+The split is deliberate. `agent-skill/` is the distribution root and carries only packaging: the plugin manifest, the changelog, and the version stamp. `agent-skill/skills/spartan/` is the skill folder and carries only behavior. Keeping them apart means the skill owns its own subdirectory names instead of competing with the names a plugin root reserves, and a symlink install exposes the skill without dragging packaging files along with it. `skills/<name>/` is also the layout every host discovers without a manifest hint.
 
 `agents/openai.yaml` is optional Codex interface metadata. The behavior contract remains in portable Markdown shared by all hosts.
 
 Distribution metadata is static only: `.claude-plugin/marketplace.json` at the repository root lists the plugin for Claude Code, and `agent-skill/.claude-plugin/plugin.json` carries the package's passive Semantic Version. Neither adds runtime behavior, and the skills CLI needs nothing beyond `SKILL.md`.
 
-Project-local discovery uses symbolic links to the same source folder:
+Project-local discovery uses symbolic links to the same skill folder:
 
 ```text
-.agents/skills/spartan -> ../../agent-skill
-.claude/skills/spartan -> ../../agent-skill
+.agents/skills/spartan -> ../../agent-skill/skills/spartan
+.claude/skills/spartan -> ../../agent-skill/skills/spartan
 ```
 
 Codex uses the `.agents` link, Claude Code uses the `.claude` link, and compatible hosts may use the same canonical source. These links install no runtime and create no divergent skill copies.
@@ -159,7 +164,7 @@ Roles not listed here follow the Spartan package default.
 These are routing preferences, not execution authority. The human starts every round.
 ```
 
-Both examples map only Spartan's existing roles and name no model. The maintained model list ships with the skill in [`agent-skill/references/routing.md`](agent-skill/references/routing.md); name models in your own declaration only if you keep them current.
+Both examples map only Spartan's existing roles and name no model. The maintained model list ships with the skill in [`agent-skill/skills/spartan/references/routing.md`](agent-skill/skills/spartan/references/routing.md); name models in your own declaration only if you keep them current.
 
 To continue an existing task in either host, reference its exact artifact instead of repeating its history:
 

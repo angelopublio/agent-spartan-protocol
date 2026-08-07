@@ -34,7 +34,7 @@ The releasable package root is `agent-skill/`. A release proposal updates:
 - `agent-skill/CHANGELOG.md` with generated release notes;
 - `agent-skill/version.txt` with the package version required by the `simple` release strategy;
 - `agent-skill/.claude-plugin/plugin.json` through a JSON `extra-files` rule;
-- `agent-skill/assets/task-template.md` through a generic `extra-files` marker, so future tasks receive the released version as their passive `protocol` birth-stamp;
+- `agent-skill/skills/spartan/assets/task-template.md` through a generic `extra-files` marker, so future tasks receive the released version as their passive `protocol` birth-stamp;
 - `.release-please-manifest.json` with the released package version.
 
 When the release proposal is squash-merged with its generated Conventional Commit title, the next workflow run creates tag `vMAJOR.MINOR.PATCH` and the matching GitHub Release. It does not publish a runtime artifact, call another agent, or modify an adopting repository. Existing task files retain the birth-stamp they received at creation.
@@ -44,7 +44,7 @@ When the release proposal is squash-merged with its generated Conventional Commi
 Use this only when repository CI cannot complete the release. The operator explicitly asks an agent to prepare one manual release; each external action still needs operator authorization.
 
 1. Determine the next version from Conventional Commits since the latest `vMAJOR.MINOR.PATCH` tag, using the mapping above.
-2. Prepare one release-only pull request that updates `agent-skill/CHANGELOG.md`, `agent-skill/version.txt`, `agent-skill/.claude-plugin/plugin.json`, `agent-skill/assets/task-template.md`, and `.release-please-manifest.json` to the same version. Title it `chore(main): release spartan MAJOR.MINOR.PATCH`.
+2. Prepare one release-only pull request that updates `agent-skill/CHANGELOG.md`, `agent-skill/version.txt`, `agent-skill/.claude-plugin/plugin.json`, `agent-skill/skills/spartan/assets/task-template.md`, and `.release-please-manifest.json` to the same version. Title it `chore(main): release spartan MAJOR.MINOR.PATCH`.
 3. After that pull request is reviewed and merged, tag its merge commit as `vMAJOR.MINOR.PATCH` and create the GitHub Release from the matching changelog section.
 4. Restore or repair the repository workflow separately; do not add release scripts or runtime behavior to `agent-skill/`.
 

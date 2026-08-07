@@ -7,6 +7,7 @@
   "plugins": [
     {
       "name": "spartan",
+      "displayName": "Agent Spartan Protocol",
       "source": "./agent-skill",
       "description": "Portable human-mediated software-task handoffs through durable repository-local Markdown.",
       "repository": "https://github.com/angelopublio/agent-spartan-protocol",
