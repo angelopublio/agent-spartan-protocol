@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [0.6.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.5.0...v0.6.0) (2026-08-07)
+
+
+### Features
+
+* **plugin:** move the skill into skills/spartan and set the marketplace display name ([ca86623](https://github.com/angelopublio/agent-spartan-protocol/commit/ca866235f8f77502022815ab0a134e58138159fd))
+
 ## [0.5.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.4.1...v0.5.0) (2026-08-05)
 
 
