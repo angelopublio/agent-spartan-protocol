@@ -51,11 +51,10 @@ The skill recommends the host; the human keeps the final choice. Default mapping
 |---|---|
 | Claude Code | Cockpit (task authoring and coordination with the human), planning, code review |
 | Codex | Plan review, implementation (coding), testing, browser and end-to-end verification (e.g. Playwright) |
-| Cursor | Optional third host: implementation (coding) and testing, which frees Codex for review |
 
 This mapping deliberately crosses vendors between producing and reviewing: Claude plans and Codex reviews the plan; Codex implements and Claude reviews the code. Deviate when capability, availability, or task context justifies it, and record the reason in the task file.
 
-Cursor is optional and belongs to a repository that has it available. When it takes implementation, the producing and reviewing hosts separate without the two-host alternation above: Claude Code plans, Cursor implements, and Codex reviews or verifies both.
+The default mapping covers two hosts because alternating producer and reviewer across their vendors is the protocol's built-in independence mechanism. A host beyond those two enters a round only when the target repository's own instructions name it for that role or when the human explicitly chooses it for the current round; the round records which admission path applied. When an admitted host takes implementation, producer and reviewer separate without the two-host alternation: one host plans, the admitted host implements, and the third reviews or verifies both.
 
 Independence is a property of model vendors, not of host names. Codex and Claude Code each fix their vendor by the host, but Cursor runs models from several vendors, so its vendor is set by the model it ran. Compare the model vendor of the producing round with the model vendor of the reviewing round: they are independent when the two vendors differ and correlated when they match, whatever the hosts are called. Composer is Cursor's own model, so it is a third vendor beside Anthropic and OpenAI; a Cursor round driving a Claude model correlates with Claude Code rounds while staying independent of Codex rounds, and a GPT model inverts that. Every round MUST record the model it actually ran, which is what lets a later reviewer make this comparison for any model, including one from a vendor not named here.
 
@@ -69,9 +68,9 @@ In that case the current round records what was refused or missing and why, and 
 
 ### Current model reference
 
-Use this table to fill the "Model and effort" line with a concrete name. It ages; verify against the human's plan and update this section when vendors ship new models. The Codex and Claude Code rows were last verified in July 2026; the Cursor row was added in August 2026. Date each row's own last check rather than restating one date for the table, so adding a row never backdates it.
+Use this table to fill the "Model and effort" line with a concrete name. It ages; verify against the human's plan and update this section when vendors ship new models. The Codex and Claude Code rows were last verified in July 2026; the Cursor row was last verified in August 2026. Date each row's own last check rather than restating one date for the table, so adding a row never backdates it.
 
-Not every host exposes an effort control. When it does not, the "Model and effort" line states that instead of naming a level, because a level the host cannot accept is as unusable to the human as the generic phrase the contract already forbids. Composer is the current case: it calibrates its own effort and offers no user-selectable level, so a Cursor round records `Composer, no user-selectable effort`.
+When the chosen model exposes selectable effort, the round names one level matched to the assessed risk and actually selectable on the human's plan. When the model exposes none, the "Model and effort" line states that instead of naming a level, because a level the host cannot accept is as unusable to the human as the generic phrase the contract already forbids. Assessed risk then governs the host and role choice: a `routine` round may stay in the effort-less model, while `material` or `high-impact` reasoning is a reason to route to a model that exposes effort. A speed or cost toggle is never turned into an effort recommendation. By the owner's August 2026 observation of the product UI, Composer 2.5 exposes no effort selector, so a Cursor round records `Composer 2.5, no user-selectable effort`.
 
 | Host | Model | Recommended use in Spartan rounds |
 |---|---|---|
@@ -83,7 +82,11 @@ Not every host exposes an effort control. When it does not, the "Model and effor
 | Claude Code | Opus | Default for cockpit, planning, and code review at high effort |
 | Claude Code | Fable 5 | Reserve for `high-impact` risk or unusually complex/sophisticated reasoning; do not default to it over Opus |
 | Claude Code | Sonnet / Haiku | `routine` risk or high-volume rounds |
-| Cursor | Composer | Implementation and testing rounds; Cursor's own model, so a third vendor beside Anthropic and OpenAI. No user-selectable effort: it calibrates its own (added August 2026) |
+| Cursor | Composer 2.5 | Implementation and testing rounds; Cursor's own model, so a third vendor beside Anthropic and OpenAI. No user-selectable effort by the owner's observation of the product UI (verified August 2026) |
+
+This table lists the package's default model recommendations for hosts admitted to a round, not everything a host can run. When a repository's instructions declare a specific model, the round honors it under the same admission rule used for a non-default host and names an effort level if that model exposes one. The round also records the model's vendor attribution and the path it ran through. The path matters because the same model name can carry a different vendor attribution inside a host than it does directly, so an independence comparison uses the round's recorded attribution and path, never the host name.
+
+Grok 4.5 is declaration-only reference data, not a recommended table row. It exposes low, medium, and high effort, with high as the documented default; a `routine` round names medium, while a `material` or `high-impact` round names high. Effort switching and Fast mode require a Pro or higher plan, while the Start plan fixes Grok 4.5 at medium effort in non-fast mode, so the named level must be selectable on the human's plan. Grok 4.5 is documented as a joint model from Cursor and SpaceXAI, so its vendor attribution is joint rather than a single vendor (verified August 2026).
 
 Beyond the default mapping, choose by role and capability, not brand loyalty:
 
@@ -94,4 +97,4 @@ Beyond the default mapping, choose by role and capability, not brand loyalty:
 - For a review or re-review, recommend a different host - ideally a different vendor - than the one that produced or last modified the work under review; self-review correlates blind spots. The human MAY override.
 - Recommend a native host feature only as a human choice. Do not invoke, monitor, resume, or depend on it.
 
-The handoff is delivered as two blocks: a "Recommended execution" block stating the recommended host with a one-phrase reason, one concrete model and effort level, and the invocation style matched to what that host supports (`$spartan` for Codex, `/spartan` for Claude Code, the skill named in the prompt for a host such as Cursor that discovers skills without exposing a token, or a direct prompt for a host without skill support); then a clean prompt block naming the next role and action. The human decides the actual host, model, and invocation, and starts the round manually.
+The handoff is delivered as two blocks: a "Recommended execution" block stating the recommended host with a one-phrase reason, one concrete model and effort level, and the invocation style matched to what that host supports (`$spartan` for Codex, `/spartan` for Cursor, `/spartan` for Claude Code, the skill named in the prompt for a host that discovers skills from `SKILL.md` but exposes no invocation token, or a direct prompt for a host without skill support); then a clean prompt block naming the next role and action. The human decides the actual host, model, and invocation, and starts the round manually.

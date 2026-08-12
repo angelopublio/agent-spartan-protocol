@@ -68,7 +68,7 @@ Run the relevant repository checks and update the same task file.
 Return only the next handoff, or a completion notice if no work remains.
 ```
 
-The invocation must match what the recommended host actually supports, not its name. Use the host's own skill token when it has one: `$spartan` for Codex, `/spartan` for Claude Code (`/spartan:spartan` when installed as a plugin). When the host discovers skills but exposes no token, name the skill in the prompt instead, as Cursor does. Only a host without skill support gets the direct prompt. Never pair a host with another host's token.
+The invocation must match what the recommended host actually supports, not its name. Use the host's own skill token when it has one: `$spartan` for Codex, `/spartan` for Cursor, and `/spartan` for Claude Code (`/spartan:spartan` when installed as a plugin). When the host discovers skills from `SKILL.md` but exposes no invocation token, name the skill in the prompt instead. Only a host without skill support gets the direct prompt. Never pair a host with another host's token.
 
 Always deliver both blocks. The first is advisory and the human may override it; name one concrete model and one concrete effort level, never a generic phrase such as "best available model". The second contains only the prompt, with no execution metadata, so the human can paste it unchanged.
 
