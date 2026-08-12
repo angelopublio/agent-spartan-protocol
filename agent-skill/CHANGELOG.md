@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [0.6.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.6.0...v0.6.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* **spartan:** correct Cursor invocation and generalize host admission ([eb63ade](https://github.com/angelopublio/agent-spartan-protocol/commit/eb63ade2212f874c06a2a5ac6c1d0bce91a29faa))
+
 ## [0.6.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.5.0...v0.6.0) (2026-08-07)
 
 
