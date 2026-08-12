@@ -2,15 +2,15 @@
 protocol: "0.5.0"
 id: plugin-skill-discovery-and-display-name
 created_at: 2026-08-07
-status: active
-phase: verifying
+status: completed
+phase: complete
 task_type: implementation
 risk: material
 current_role: human-operator
-next_role: human-operator
-updated_at: 2026-08-07
-handoff_id: HX-003
-next_handoff_id: HX-004
+next_role: none
+updated_at: 2026-08-11
+handoff_id: HX-004
+next_handoff_id: none
 ---
 
 # Plugin skill discovery and marketplace display name
@@ -56,7 +56,7 @@ The cause was the package layout. `agent-skill/` was simultaneously the plugin r
 - [x] Release automation points at the moved task template, and the version marker survives the move.
 - [x] Project-local and personal symlinks resolve to the new skill folder for both hosts.
 - [x] No live document still references the pre-move payload paths.
-- [ ] A marketplace install from a published version lists the skill and the new label in the Claude desktop app.
+- [x] A marketplace install from a published version lists the skill and the new label in the Claude desktop app.
 
 ## Decisions
 
@@ -99,6 +99,7 @@ The cause was the package layout. `agent-skill/` was simultaneously the plugin r
 - The release updated `agent-skill/skills/spartan/assets/task-template.md` at its post-move path, which is direct proof that the corrected `extra-files` rule works; tasks created from now on are born with `protocol: "0.6.0"`.
 - Local repository fast-forwarded to `b5fb227`; `version.txt`, `plugin.json`, and the template all read 0.6.0, and tag `v0.6.0` is present locally.
 - Post-release re-check: both manifests still pass `claude plugin validate`, and all four symlinks still resolve `SKILL.md`.
+- Human validation on the second Claude desktop account: the marketplace-installed v0.6.0 plugin displays as "Agent Spartan Protocol", and its "Habilidades" tab lists the `spartan` skill. This closes the final acceptance criterion.
 
 ## Review
 
@@ -115,24 +116,8 @@ None.
 
 ## Next Action
 
-Everything this repository can settle is settled and released as v0.6.0. One acceptance criterion stays open because it is an observation only the owner can make: on the second account, update the plugin from the marketplace and confirm the "Habilidades" tab now lists the skill under the "Agent Spartan Protocol" label. Success condition: the last acceptance-criteria checkbox is checked from direct observation, after which this task completes. If the tab is still empty at 0.6.0, the `skills/` layout is ruled out and the next round investigates the desktop app's plugin loader rather than the package layout.
+None. The task is complete: all acceptance criteria are satisfied, the recorded review verdict is `APPROVE`, relevant checks passed, and no blocker remains.
 
 ## Next Handoff
 
-```text
-Recommended execution (human decides):
-- Host: the owner's second account in the Claude desktop app, the only place the remaining criterion is observable
-- Model and effort: none applicable; this round is a human observation, not a model round
-- Role: human-operator
-- Handoff: HX-004
-- Invocation: none; open Settings, then Plugins, and use the update control on the Agent Spartan Protocol entry
-```
-
-```text
-Open `spartan/tasks/0024-plugin-skill-discovery-and-display-name.md` (handoff HX-004).
-
-Act as human-operator. On the second account, update the plugin from the marketplace to 0.6.0 and record whether the "Habilidades" tab lists the spartan skill and whether the entry is labelled "Agent Spartan Protocol".
-Run the relevant repository checks and update the same task file.
-
-Return only the next handoff, or a completion notice if no work remains.
-```
+No outstanding handoff.
