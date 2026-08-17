@@ -2,6 +2,17 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.0.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.6.1...v1.0.0) (2026-08-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **spartan:** the `APPROVE` and `CHANGES` review verdicts are renamed to `APPROVED` and `CHANGES_REQUESTED`. Consumers matching the old literals must accept both spellings.
+
+### Features
+
+* **spartan:** name review verdicts by resulting state ([ad1331e](https://github.com/angelopublio/agent-spartan-protocol/commit/ad1331e18582370e21e905b93179a2b00d9a7a5b))
+
 ## [0.6.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.6.0...v0.6.1) (2026-08-12)
 
 
