@@ -18,6 +18,29 @@ Keep the protocol static, host-neutral, human-mediated, and repository-local. Do
 - `spartan/tasks/*.md` is handoff truth.
 - Conversation history is ephemeral and must not be required for continuation.
 
+## Agent hosts
+
+| Binding | Host | Client context |
+| --- | --- | --- |
+| planner | Claude Code | personal |
+| reviewer.plan | Cursor | personal |
+| implementer | Cursor | personal |
+| reviewer.implementation | Cursor | personal |
+
+`personal` is an opaque client-context alias. It identifies an externally prepared official-client launch context; it is not a credential, provider account ID, email address, or built-in Bridge account type. Repository content may select this alias but may not define launcher commands, authentication paths, credential variables, tokens, cookies, or API keys.
+
+The same Cursor host is bound to plan review, implementation, and implementation review. Each author and reviewer round must use a fresh, separate execution context. This provides context separation, not cross-host or cross-vendor independence.
+
+## Spartan Bridge automation authority
+
+This section configures this repository as a Spartan Bridge consumer. It changes nothing about the portable protocol, which remains static, host-neutral, and human-mediated. `AGENTS.md` is repository instruction; protocol content lives under `agent-skill/skills/spartan/`. The protocol already allows a handoff to be executed by an external, human-installed tool that it does not depend on, and that is the only authority this section grants.
+
+- A human-started Spartan Bridge run may start the mapped reviewer automatically.
+- The Bridge may return findings to the current producer and repeat up to 3 review cycles.
+- This run grants the Bridge `task_artifact_write` only for persisting validated reviewer findings and transition metadata to the explicitly identified current Spartan task artifact.
+
+The grant ends when a reviewer records `APPROVED` or `BLOCKED`, when the three cycles are exhausted, or when applying a finding would broaden the current round's authorization. The Bridge must not start a planner, implementer, or any other non-reviewer role. A human starts every implementation round and remains the only authority for commit, push, tag, pull request, merge, or release. The Bridge writes only the current task artifact named by the run; it does not create tasks, edit other artifacts, or modify files under `agent-skill/`.
+
 ## Repository workflow
 
 - Before starting work, agents SHOULD run `git pull --ff-only` when `git status --short` shows a clean working tree. If the tree is not clean, preserve the existing changes and do not pull.
