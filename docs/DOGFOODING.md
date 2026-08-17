@@ -36,11 +36,11 @@ Claude acts as `independent-reviewer`, remains read-only, and looks for:
 - boundary leaks toward runtime behavior;
 - task artifacts that require hidden conversation context.
 
-Claude records `APPROVE`, `CHANGES`, or `BLOCKED` in the same task file and returns one next handoff. Claude must not invoke Codex.
+Claude records `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` in the same task file and returns one next handoff. Claude must not invoke Codex.
 
 ### Round 4: amend only when required
 
-If the verdict is `CHANGES`, the human opens a fresh Codex task with that handoff. Codex applies only the accepted findings, validates the package, updates the same task file, and returns it for another read-only review if necessary.
+If the verdict is `CHANGES_REQUESTED`, the human opens a fresh Codex task with that handoff. Codex applies only the accepted findings, validates the package, updates the same task file, and returns it for another read-only review if necessary.
 
 Do not create an automatic correction loop. The human decides whether each additional round is justified.
 

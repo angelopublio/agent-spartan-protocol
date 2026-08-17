@@ -73,7 +73,9 @@ Controlled values:
 - `task_type`: `investigation`, `planning`, `implementation`, `review`, `verification`
 - `risk`: `routine`, `material`, `high-impact`
 - roles: `human-operator`, `investigator`, `planner`, `implementer`, `reviewer`, `independent-reviewer`, `verifier`
-- verdict: `PENDING`, `APPROVE`, `CHANGES`, `BLOCKED`
+- verdict: `PENDING`, `APPROVED`, `CHANGES_REQUESTED`, `BLOCKED`
+
+Artifacts created before this version use the earlier `APPROVE` and `CHANGES` spellings. Those artifacts remain valid as historical record, and a reader MUST accept both spellings.
 
 The artifact MUST contain the current objective, scope, constraints, acceptance criteria, decisions, work completed, evidence, review state, blockers, and next action. Its filename MUST use the immutable `NNNN-slug.md` creation-order convention, and its frontmatter MUST include `created_at` and `updated_at` dates.
 
@@ -176,7 +178,7 @@ that a standard has one copy that can be corrected once.
 
 ## Review and completion
 
-A review round MUST record exactly one explicit verdict: `APPROVE`, `CHANGES`, or `BLOCKED`. An absent or ambiguous verdict is not approval.
+A review round MUST record exactly one explicit verdict: `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED`. An absent or ambiguous verdict is not approval.
 
 A reviewer SHOULD remain read-only unless the human explicitly authorizes changes for that round. A fresh-context or cross-vendor review is advisory independence, not a technically enforced guarantee.
 
@@ -186,7 +188,7 @@ A task MAY become `completed` only when:
 
 - every acceptance criterion is satisfied or explicitly waived by the human;
 - relevant checks have recorded outcomes;
-- every required review is `APPROVE`;
+- every required review is `APPROVED`;
 - no blocker remains;
 - there is no required next action.
 

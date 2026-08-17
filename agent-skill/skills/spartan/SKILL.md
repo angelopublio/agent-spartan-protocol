@@ -44,7 +44,7 @@ Do not turn the task file into a transcript, append-only event log, database, le
 
 ## Review and completion
 
-Use only `PENDING`, `APPROVE`, `CHANGES`, or `BLOCKED` as review verdicts. A review round must write an explicit verdict. Reviewers remain read-only unless the user expressly asks them to make changes.
+Use only `PENDING`, `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` as review verdicts. A review round must write an explicit verdict. Reviewers remain read-only unless the user expressly asks them to make changes.
 
 Mark a task `completed` only when its acceptance criteria are satisfied, relevant checks have recorded outcomes, required review is approved, and no blocker remains. Otherwise leave it `active` or `blocked` and produce the next handoff.
 
