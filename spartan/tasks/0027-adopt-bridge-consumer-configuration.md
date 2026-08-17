@@ -2,15 +2,15 @@
 protocol: "0.6.1" # x-release-please-version
 id: adopt-bridge-consumer-configuration
 created_at: 2026-08-17
-status: active
-phase: reviewing
+status: completed
+phase: complete
 task_type: implementation
 risk: high-impact
-current_role: implementer
-next_role: independent-reviewer
+current_role: independent-reviewer
+next_role: none
 updated_at: 2026-08-17
-handoff_id: none
-next_handoff_id: HX-001
+handoff_id: HX-001
+next_handoff_id: none
 ---
 
 # Adopt Bridge consumer configuration in this repository's instructions
@@ -60,7 +60,7 @@ This repository is the public reference other repositories copy. The decision be
 - [x] The consumer-versus-protocol decision is recorded in Decisions below.
 - [x] Protocol files under `agent-skill/` are untouched.
 - [x] A path-scoped Conventional Commit of `AGENTS.md`, `.gitignore`, and this artifact is the only new commit, and `git status --short` is clean.
-- [ ] A reviewer records an explicit `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` verdict.
+- [x] A reviewer records an explicit `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` verdict.
 
 ## Decisions
 
@@ -77,6 +77,7 @@ This repository is the public reference other repositories copy. The decision be
 - Added `.spartan-bridge/` to `.gitignore`.
 - Path-scoped Conventional Commit of `AGENTS.md`, `.gitignore`, and this artifact. Did not push, tag, or open a pull request, and did not touch the pending release proposal or any other task artifact.
 - This round ran in Cursor on Grok 4.6 (high effort; vendor attribution joint Cursor/SpaceXAI).
+- Independent review round: read-only verification of the committed configuration against the Bridge parser and this repository's own instructions. No repository file was changed; only this artifact was updated. The pasted prompt carried `HX-001` and matched `next_handoff_id`. Ran in Claude Code on Claude Opus, high effort (Anthropic vendor, independent of the implementing Cursor/Grok round).
 
 ## Evidence
 
@@ -85,13 +86,28 @@ This repository is the public reference other repositories copy. The decision be
 - `git diff --check`: clean. `git diff --name-only -- agent-skill`: empty. `git status --short -- spartan/tasks/` listed only this new artifact before the commit.
 - Risk is `high-impact` because this is an authorization grant that will be read as exemplary; rollback is deleting the consumer section, but the meaning is the grant, not the diff size.
 
+Review round (read-only):
+
+- Ran the Bridge parser `src/policy/agents-policy.ts` from the companion runtime against this repository's committed `AGENTS.md`: `ok: true`, `host: cursor`, `client_context: personal`, `automatic_review_authorized: true`, `task_artifact_write_authorized: true`, `max_review_cycles: 3`. This is the authoritative byte-for-byte test; the runtime accepts the file with exactly the intended values.
+- Independent line-level check against the parser's literals: automatic-review grant exact-match count `1`, `task_artifact_write` grant exact-match count `1`, cycle item matches the pinned regex with `3`. No duplicates, which would be `agents_policy_invalid`.
+- `The human starts every round.` appears zero times as a trimmed standalone line and zero times as a substring anywhere in `AGENTS.md`.
+- `AGENTS.md` is ASCII-only, LF-only, has no trailing whitespace, and ends with one newline, so no invisible character can break the literal match.
+- `.gitignore` is `.idea`, `.DS_Store`, `.spartan-bridge/`, now with a trailing newline (the previous file had none).
+- `git diff --name-only HEAD~1 HEAD`: exactly `.gitignore`, `AGENTS.md`, and this artifact. Nothing under `agent-skill/`. `git status --short`: clean. `git log --oneline -1`: `docs: configure this repository as a Spartan Bridge consumer`, a valid Conventional Commit type per `AGENTS.md`.
+- `release-please-config.json` tracks only the `agent-skill` package, so a root-level `docs:` commit cannot affect the pending release proposal for the verdict-vocabulary change.
+- Cross-checked the prose stopping conditions against the parser's behaviour: extra list items in the automation section are ignored by the parser, so keeping the further constraints as prose is correct and carries no parsing risk either way.
+
 ## Review
 
-Verdict: PENDING
+Verdict: APPROVED
+
+The consumer-versus-protocol decision holds. `AGENTS.md` is repository instruction and is not shipped to adopters, who install `agent-skill/skills/spartan/`. The protocol already permits a handoff to be executed by an external, human-installed tool it does not depend on, and this section grants nothing beyond that: the deletion test still passes, no protocol file changed, and no host binding, cycle count, or write grant became a protocol rule. The cycle count of `3` is inside the parser's `1|2|3` domain and is argued as a ceiling rather than a target, with the prose stopping conditions carrying the real bound. The `task_artifact_write` grant is the narrow one the runtime defines and is scoped in prose to the single named current artifact. The three findings below are documentation follow-ups outside this task's declared scope; none is a defect in what was committed, and acting on them here would broaden this round's authorization.
 
 Findings:
 
-- None recorded.
+1. `## Agent hosts` now carries two incompatible published meanings inside this repository. `README.md` documents it as a `| Role | Host |` table of Spartan roles that is explicitly "routing preferences, not execution authority"; the committed `AGENTS.md` uses `| Binding | Host | Client context |` with Bridge binding names (`reviewer.plan`, `reviewer.implementation`) that Spartan's own routing does not define, parsed by an external runtime. Each is correct for its own reader, and neither mentions the other. Because this repository is the public reference, a follow-up round should reconcile the two in `README.md`.
+2. `README.md` states the one rule shaping any host declaration — a reviewer must not be the host that produced the work under review — and, for two hosts, prescribes saying so rather than pinning the reviewer. The committed table pins `implementer` and `reviewer.implementation` both to Cursor. `AGENTS.md` discloses the consequence in plain words ("context separation, not cross-host or cross-vendor independence"), so it does not mislead, and Bridge bindings are a different axis from Spartan's advisory routing. It remains the shape the reference repository's own README tells adopters to avoid, and belongs in the same follow-up as Finding 1.
+3. Interaction note, no change requested here. `README.md`'s prescribed closing line ends with `The human starts every round.` preceded by another sentence on the same line. The Bridge disables automatic review only when that sentence is the entire trimmed line, so the README form is safe as written, and this repository correctly avoids the standalone form. The coupling is invisible from either file and deserves one sentence if Finding 1 is taken up.
 
 ## Blockers
 
@@ -99,24 +115,27 @@ None.
 
 ## Next Action
 
-Independent-reviewer, read-only: issue an explicit `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` verdict on the recorded decision, the three authorising sentences, the cycle-count and write-grant choices, the prose constraints, the gitignore entry, and confirmation that protocol files were not modified.
+None. Every acceptance criterion is satisfied, the relevant checks have recorded outcomes, the review verdict is `APPROVED`, and no blocker remains. The three findings are follow-up documentation work for a separate task, not remaining work on this one.
 
 ## Next Handoff
 
+No outstanding handoff. This task is complete.
+
+Non-binding suggestion for a separate new task, from Findings 1-3: reconcile `README.md` with the committed `AGENTS.md` so the repository's public reference and its own instructions agree on what `## Agent hosts` means.
+
 ```text
 Recommended execution (human decides):
-- Host: Claude Code (fresh-context independent review; Anthropic vendor differs from this Cursor/Grok implementation round)
+- Host: Claude Code (documentation round in the repository's public reference, framed with the human)
 - Model and effort: Claude Opus, high effort (fallback: Sonnet 5 if Opus is unavailable)
-- Role: independent-reviewer
-- Handoff: HX-001
+- Role: planner
 - Invocation: `/spartan`, passing the prompt block below as the argument
 ```
 
 ```text
-Open `spartan/tasks/0027-adopt-bridge-consumer-configuration.md` (handoff HX-001).
+Create a new uniquely numbered task from `assets/task-template.md` in `spartan/tasks/`.
 
-Act as independent-reviewer. Read-only review of the committed Bridge consumer configuration: the recorded decision that this is repository instruction not protocol, the three authorising sentences byte-for-byte, the cycle-count and task_artifact_write choices, the prose constraints, absence of the conflicting standalone line, `.spartan-bridge/` in `.gitignore`, and that protocol files under `agent-skill/` were not modified. Success is an explicit APPROVED, CHANGES_REQUESTED, or BLOCKED verdict in this artifact.
-Run the relevant repository checks and update the same task file.
+Act as planner. This repository's `README.md` documents `## Agent hosts` as a `| Role | Host |` table of Spartan roles that is routing preference and never execution authority, and states that a reviewer must not be the host that produced the work under review. The committed root `AGENTS.md` now also carries `## Agent hosts` as a `| Binding | Host | Client context |` table of Bridge bindings that pins Cursor as both implementer and implementation reviewer, plus a `## Spartan Bridge automation authority` section. Define the scope, constraints, and acceptance criteria for reconciling the two so an adopter reading either file understands which one applies to them, and decide whether the Bridge table should keep the `## Agent hosts` heading at all. Success is a new artifact a later round can act on without conversation history. Do not reopen or update `spartan/tasks/0027-adopt-bridge-consumer-configuration.md`, and do not commit in this round.
+Run the relevant repository checks and update the new task file.
 
 Return only the next handoff, or a completion notice if no work remains.
 ```
