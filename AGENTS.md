@@ -29,7 +29,7 @@ Keep the protocol static, host-neutral, human-mediated, and repository-local. Do
 
 `personal` is an opaque client-context alias. It identifies an externally prepared official-client launch context; it is not a credential, provider account ID, email address, or built-in Bridge account type. Repository content may select this alias but may not define launcher commands, authentication paths, credential variables, tokens, cookies, or API keys.
 
-The same Cursor host is bound to plan review, implementation, and implementation review. Each author and reviewer round must use a fresh, separate execution context. This provides context separation, not cross-host or cross-vendor independence.
+Each author round and the reviewer round that follows it must use fresh, separate execution contexts. Where one host holds both bindings, that separation is session isolation only, not cross-vendor independence.
 
 ## Spartan Bridge automation authority
 
