@@ -132,12 +132,12 @@ Start the coding host with the target project as its working folder. Spartan sto
 
 When Spartan creates that first task in a repository whose root has neither an `AGENTS.md` nor a `CLAUDE.md`, the round also adds one advisory line suggesting you create an `AGENTS.md` (stack, dev/build/lint/test commands, conventions) plus a minimal `CLAUDE.md` that points to it, so later hosts start with shared instructions to read. The suggestion is tied to the repository's first task — it fires once, with no hidden flag — and Spartan never writes those files for you. You decide whether to add them.
 
-A human can also declare repository-specific host preferences in `AGENTS.md`. This guides future handoff recommendations; it never authorizes Spartan to start a host or round. One rule shapes any such declaration: a reviewer must not be the host that produced the work under review, because self-review correlates blind spots.
+A human can also declare repository-specific host preferences in `AGENTS.md`, under a `## Spartan host preferences` heading. This guides future handoff recommendations; it never authorizes Spartan to start a host or round. One rule shapes any such declaration: a reviewer must not be the host that produced the work under review, because self-review correlates blind spots.
 
 With two hosts that rule cannot be satisfied by a fixed assignment, since the same host plans one round and implements another. Say so instead of pinning the reviewer:
 
 ```markdown
-## Agent hosts
+## Spartan host preferences
 
 | Role | Host |
 |---|---|
@@ -152,7 +152,7 @@ These are routing preferences, not execution authority. The human starts every r
 With three hosts a fixed assignment satisfies the rule on its own, because neither producer is the reviewer:
 
 ```markdown
-## Agent hosts
+## Spartan host preferences
 
 | Role | Host |
 |---|---|
@@ -165,6 +165,12 @@ These are routing preferences, not execution authority. The human starts every r
 ```
 
 Both examples map only Spartan's existing roles and name no model. The maintained model list ships with the skill in [`agent-skill/skills/spartan/references/routing.md`](agent-skill/skills/spartan/references/routing.md); name models in your own declaration only if you keep them current.
+
+A repository that also runs the Spartan Bridge carries a second, differently shaped section in the same `AGENTS.md`: `## Agent hosts`, a `| Binding | Host | Client context |` table that the Bridge parses. The Bridge is an optional runtime, installed separately from this protocol; nothing above depends on it, and a repository without it needs no such section. The two sections sit on different axes — `## Spartan host preferences` is an advisory routing preference between hosts, `## Agent hosts` is an execution binding between named client contexts — so they stay separate and must not be merged, nor one converted into the other. This repository's own [`AGENTS.md`](AGENTS.md) is such a Bridge configuration; the full configuration reference lives in the Bridge project.
+
+A Bridge binding table does not satisfy Spartan's no-self-review preference. Binding the same host to producer and reviewer buys context separation, not cross-host or cross-vendor independence — which is why this repository, pinning Cursor to both implementation and implementation review, says so in its own `AGENTS.md` rather than presenting that shape as advice to copy.
+
+One coupling is worth knowing before a failed run teaches it: the Bridge treats the sentence `The human starts every round.` alone on a line in `AGENTS.md` as an explicit denial of automatic review.
 
 To continue an existing task in either host, reference its exact artifact instead of repeating its history:
 
