@@ -6,6 +6,8 @@
 - Conversation with the repository owner may occur in Portuguese, but persisted repository content remains English.
 - This rule applies to `agent-spartan-protocol`. It does not force unrelated target-product user interfaces or localized content to use English.
 
+Shared agent tooling and working conventions live in `~/Documents/DEV/agent-scripts`; read its `AGENTS.md` before anything (skip if missing).
+
 ## Product boundary
 
 Spartan coordinates information, not processes. It may recommend, record, and hand off the next step. It must not initiate, supervise, resume, retry, or guarantee execution by another agent.
