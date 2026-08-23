@@ -57,8 +57,8 @@ The current host agent MUST:
 3. Classify the task type, risk, current role, and recommended next role.
 4. Perform one bounded, useful unit of work within the user's current authorization.
 5. Run relevant checks already supplied by the target repository when practical.
-6. Update the task artifact with the current continuation state.
-7. Return one handoff, ask one blocking human question, or issue a completion notice.
+6. If the round is writable, update the task artifact with the current continuation state. If the round is technically read-only, return the structured result defined in "Review and completion" and write nothing.
+7. If the round is writable, return one handoff, ask one blocking human question, or issue a completion notice. A technically read-only review or verifier round is complete when it returns the structured result; it does not issue a persisted envelope.
 
 The lifecycle describes expected behavior. No daemon, transition engine, event fold, scheduler, or background process enforces it.
 
@@ -178,9 +178,15 @@ that a standard has one copy that can be corrected once.
 
 ## Review and completion
 
-A review round MUST record exactly one explicit verdict: `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED`. An absent or ambiguous verdict is not approval.
+A review or verifier round MUST produce exactly one explicit verdict: `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED`. An absent or ambiguous verdict is not approval.
 
-A reviewer SHOULD remain read-only unless the human explicitly authorizes changes for that round. A fresh-context or cross-vendor review is advisory independence, not a technically enforced guarantee.
+A round is **technically read-only** when its host, session, sandbox, or launcher cannot write repository files, and **writable** otherwise. The distinction is a property of the execution, not of the role name. `reviewer`, `independent-reviewer`, and `verifier` may run either way.
+
+A technically read-only review or verifier round owns a return value, never a file. Its entire deliverable is a structured result in its final response: exactly one verdict from the vocabulary, its findings, the evidence behind them, and the host, model, effort, and vendor attribution it actually ran. Returning that result satisfies the round completely. It consumes its handoff, applies the compare-before-change test, and reports a mismatch instead of acting. It does not set `handoff_id`, does not set or clear `next_handoff_id`, and does not touch `## Next Handoff`.
+
+The artifact MUST carry an explicit verdict before the task can complete. The next explicitly authorized writable round persists the returned result in one atomic edit: it transcribes the verdict unchanged and the findings faithful in substance, attributed to the reviewing execution and marked as adopted rather than authored; sets `handoff_id` to the identifier the read-only round consumed; updates `current_role`, `next_role`, `phase`, `status`, and `updated_at`; and either issues one new envelope or clears the proposal. Advancement happens once for the whole round. Persistence validates the result (one vocabulary verdict, identified execution, matching identifier) and MUST NOT silently rewrite a verdict. Worked examples live in [review-persistence.md](review-persistence.md).
+
+A reviewer SHOULD remain read-only unless the human explicitly authorizes changes for that round. That sentence is review discipline, not a write prohibition that conflicts with persistence. A fresh-context or cross-vendor review is advisory independence, not a technically enforced guarantee.
 
 An independent review SHOULD run in a different host - and preferably a different vendor - than the one that produced or last modified the work under review, because a host reviewing its own output shares its blind spots. The same preference applies to a re-review after fixes: prefer a host other than the one that applied them. This preference is advisory; the human chooses the host and MAY override it.
 
@@ -198,7 +204,7 @@ A task MAY also be closed as `completed` when its remaining work has been fully 
 
 ## Handoff contract
 
-An incomplete, unblocked round MUST return exactly one short human-transferable prompt. It MUST:
+An incomplete, unblocked **writable** round MUST return exactly one short human-transferable prompt. It MUST:
 
 - reference the current task's own `spartan/tasks/NNNN-<slug>.md`, never another task's file;
 - name one next role;
@@ -209,29 +215,42 @@ An incomplete, unblocked round MUST return exactly one short human-transferable 
 - be written in English;
 - be delivered as two separate text blocks: first a "Recommended execution" block for the human, then the prompt block to pass to the next host.
 
+A technically read-only review or verifier round MUST NOT return a persisted handoff. It returns the structured result instead. The writable successor in "Review and completion" issues the next envelope.
+
 The "Recommended execution" block is advisory. The human MAY override any part of it. It MUST state the recommended host with a one-phrase reason, one concrete model and one concrete effort or reasoning level (for example "GPT-5 Codex, reasoning effort high" or "Claude Opus, extended thinking"), and the invocation style. Generic phrases such as "the best available model" do not satisfy the contract; when the exact model on the human's plan is unknown, name the most likely model and add one fallback phrase.
 
 The prompt block contains only the prompt itself, with no execution metadata, so the human can paste it unchanged: as the skill argument when invoking the host's skill token, or directly when the target host has no skill support.
 
 The invocation style MUST match what the recommended host supports, determined by capability rather than by host name. A host that exposes a skill token receives that token: `$spartan` for Codex, `/spartan` for Cursor, and `/spartan` for Claude Code (`/spartan:spartan` when installed under a plugin namespace). A host that discovers skills from `SKILL.md` but exposes no invocation token receives the prompt with the skill named in it. Only a host without skill support receives the direct prompt. A handoff MUST NOT pair a recommended host with another host's invocation token, and MUST NOT route a skill-capable host to the direct prompt merely because it is not named here.
 
-Recommended shape:
+The advisory block MUST include `- Permission: read-only | writable` so a reader can tell which shape the prompt assumes. Inferring permission from the role name is not allowed.
+
+A prompt addressed to a read-only round MUST NOT contain `update the same task file`, `record your verdict`, `Return only the next handoff` as a write or envelope instruction, or any build, formatting, code-generation, snapshot, fixture, or install step. It states that the round returns the structured result and changes nothing. It may name only checks the repository proves read-only. A write failure from a check the round could not run is not a product defect and is not grounds for `BLOCKED`.
+
+A writable follow-up prompt names one of persist only, correct only, or persist and correct, and never leaves the reader to infer it.
+
+Recommended writable shape:
 
 ```text
 Recommended execution (human decides):
 - Host: <Codex | Claude Code | other authenticated host, with a one-phrase reason>
 - Model and effort: <one concrete model, one concrete effort level, optional fallback phrase>
+- Role: <next-role>
+- Handoff: HX-NNN
+- Permission: writable
 - Invocation: <the recommended host's own convention: `$spartan` for Codex, `/spartan` for Claude Code, the skill named in the prompt for a host that discovers skills without exposing a token, direct prompt otherwise>, passing the prompt block below as the argument
 ```
 
 ```text
-Open `spartan/tasks/NNNN-<slug>.md`.
+Open `spartan/tasks/NNNN-<slug>.md` (handoff HX-NNN).
 
 Act as <next-role>. <Perform one bounded action and state its success condition>.
 Run the relevant repository checks and update the same task file.
 
 Return only the next handoff, or a completion notice if no work remains.
 ```
+
+The shipped read-only prompt shape is in [review-persistence.md](review-persistence.md).
 
 The next role is encoded in three places that MUST agree: the frontmatter `next_role`, the role and its reason in the "Recommended execution" block, and the `Act as <role>` line in the prompt block. When the next step changes, regenerate the whole handoff as a unit; never edit one part and leave the others stale.
 
@@ -247,13 +266,14 @@ An identified task (both `handoff_id` and `next_handoff_id` present, see "Task a
 |---|---|---|
 | Next role | frontmatter `next_role`; advisory `- Role:`; prompt `Act as <role>` | the three strings are equal |
 | Proposed handoff id | frontmatter `next_handoff_id`; advisory `- Handoff:`; prompt `(handoff <id>)` on the `Open` line | the three strings are equal |
+| Permission | advisory `- Permission:` | `read-only` or `writable`; regenerated with the whole block |
 | Task file | the artifact's own filename; prompt `Open spartan/tasks/NNNN-slug.md` | the prompt path resolves to this artifact |
 
-**Increment semantics.** On task creation both fields are `none`. A newly issued handoff sets `next_handoff_id` to one more than the higher of `handoff_id` and the previous `next_handoff_id`; identifiers increase monotonically within a task and are never reused, decremented, or renumbered. The identifier names the pasteable prompt text: regenerating an outstanding proposal keeps `next_handoff_id` only while the prompt block stays textually identical to the persisted one; any change inside the prompt block (its `Open` path, its `Act as <role>` line, its bounded action or success condition, or any other wording) MUST issue a higher identifier. A correction confined to the advisory block keeps the identifier, because the human pastes only the prompt block. A receiving round that accepts a matching (or absent, see below) identifier sets `handoff_id` to it before doing anything else; if it then issues another handoff it advances `next_handoff_id`, and if it leaves no outstanding proposal it sets `next_handoff_id: none` and clears the envelope. Clearing a proposal MUST NOT lower the high-water mark: `handoff_id` MUST already equal the identifier being accepted before `next_handoff_id` is set to `none`.
+**Increment semantics.** On task creation both fields are `none`. A newly issued handoff sets `next_handoff_id` to one more than the higher of `handoff_id` and the previous `next_handoff_id`; identifiers increase monotonically within a task and are never reused, decremented, or renumbered. The identifier names the pasteable prompt text: regenerating an outstanding proposal keeps `next_handoff_id` only while the prompt block stays textually identical to the persisted one; any change inside the prompt block (its `Open` path, its `Act as <role>` line, its bounded action or success condition, or any other wording) MUST issue a higher identifier. A correction confined to the advisory block keeps the identifier, because the human pastes only the prompt block. A **writable** receiving round that accepts a matching (or absent, see below) identifier sets `handoff_id` to it before doing anything else; if it then issues another handoff it advances `next_handoff_id`, and if it leaves no outstanding proposal it sets `next_handoff_id: none` and clears the envelope. A technically read-only receiving round consumes the identifier and writes nothing; its writable successor adopts. Clearing a proposal MUST NOT lower the high-water mark: `handoff_id` MUST already equal the identifier being accepted before `next_handoff_id` is set to `none`.
 
-**Compare before change.** A round started from a pasted prompt that carries an identifier MUST compare it with the artifact's `next_handoff_id` before making any change. If they match, proceed. If they differ, stop: make no change to the repository or the artifact, report the pasted identifier, the artifact's current `next_handoff_id`, and the artifact's current `Next Action`, and recommend re-running from the artifact's own current envelope. If the pasted prompt carries no identifier while the artifact proposes one, do not hard-stop: proceed under the artifact's current envelope, which is acceptance of it, so set `handoff_id` to the artifact's `next_handoff_id` and record in Work Completed that the pasted prompt carried no identifier. If both are absent, proceed as before this field existed.
+**Compare before change.** A round started from a pasted prompt that carries an identifier MUST compare it with the artifact's `next_handoff_id` before making any change. If they match, proceed. If they differ, stop: make no change to the repository or the artifact, report the pasted identifier, the artifact's current `next_handoff_id`, and the artifact's current `Next Action`, and recommend re-running from the artifact's own current envelope. If the pasted prompt carries no identifier while the artifact proposes one, do not hard-stop: proceed under the artifact's current envelope. A writable round sets `handoff_id` to the artifact's `next_handoff_id` and records in Work Completed that the pasted prompt carried no identifier. A technically read-only round consumes that envelope and writes nothing. If both are absent, proceed as before this field existed.
 
-**Write, then copy.** A round MUST write the envelope into the artifact first, then reproduce that persisted envelope verbatim in its final response, so the response is always a copy of the artifact rather than an independently authored text. Whether the human's chat actually matches the artifact at the moment of pasting, and which of several past responses they pasted, are not deterministically checkable; the receiving round's compare-before-change step is the practical detector, applied at the point where a stale paste would otherwise be silently applied.
+**Write, then copy.** A **writable** round MUST write the envelope into the artifact first, then reproduce that persisted envelope verbatim in its final response, so the response is always a copy of the artifact rather than an independently authored text. A technically read-only round has no envelope to write. Whether the human's chat actually matches the artifact at the moment of pasting, and which of several past responses they pasted, are not deterministically checkable; the receiving round's compare-before-change step is the practical detector, applied at the point where a stale paste would otherwise be silently applied.
 
 **Legacy migration.** A legacy task (neither field present) is valid as it stands and needs no retrofit; a round that only reads, completes, or blocks it without issuing a handoff adds nothing. The first round that issues a newly generated handoff on a legacy task upgrades it in one atomic edit: it adds both frontmatter fields (`handoff_id: none`, `next_handoff_id: HX-001`) and regenerates the whole `Next Handoff` section under these rules in the same edit. An edit that adds one field but leaves the old envelope lines standing, or the reverse, is a partial upgrade and MUST be finished, not left half-done.
 
@@ -263,7 +283,7 @@ Spartan MUST NOT transmit or execute the handoff. The human chooses the next hos
 
 A handoff MAY be executed by an external, human-installed tool; such a tool is outside this protocol and the protocol MUST NOT depend on it.
 
-The recommended host is only a suggestion. When the human runs a round, that round SHOULD record, in its own outcome note (Work Completed or the review line), the host and model it actually used - even when they differ from the recommendation. This keeps both the recommended and the executed host visible and lets the different-host review preference be audited. It is a single current-snapshot note per round, not a per-round execution log.
+The recommended host is only a suggestion. A writable round SHOULD record, in its own outcome note (Work Completed or the review line), the host and model it actually used - even when they differ from the recommendation. A technically read-only round includes that attribution in its structured result and writes nothing. This keeps both the recommended and the executed host visible and lets the different-host review preference be audited. It is a single current-snapshot note per round, not a per-round execution log.
 
 A completion notice MUST NOT leave the human without direction. It MUST state what was completed and its verdict or outcome, and then either:
 

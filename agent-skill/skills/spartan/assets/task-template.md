@@ -59,7 +59,7 @@ Verdict: PENDING
 
 Findings:
 
-- None recorded.
+- None recorded. A writable round persists an adopted verdict here; a technically read-only review returns its verdict in the response and writes nothing.
 
 ## Blockers
 
@@ -77,6 +77,7 @@ Recommended execution (human decides):
 - Model and effort: <one concrete model, one concrete effort level, optional fallback phrase>
 - Role: implementer
 - Handoff: HX-NNN
+- Permission: writable
 - Invocation: <the recommended host's own convention: `$spartan` for Codex, `/spartan` for Claude Code, the skill named in the prompt for a host that discovers skills without exposing a token, direct prompt otherwise>, passing the prompt block below as the argument
 ```
 

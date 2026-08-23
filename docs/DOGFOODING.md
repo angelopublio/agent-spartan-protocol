@@ -14,7 +14,7 @@ Create the initial English documentation, portable skill, task template, and `sp
 
 Open a new Codex task rooted at this repository. Invoke `$spartan` through the project-local `.agents/skills/spartan` link and reference `spartan/tasks/0001-bootstrap-v0-1.md`.
 
-The verifier remains read-only with respect to the protocol package. It may update only `spartan/tasks/0001-bootstrap-v0-1.md` with evidence, its verdict, and the next handoff. It checks:
+The verifier remains read-only with respect to the protocol package. If the session is technically read-only, it returns verdict, findings, evidence, and execution attribution in its response and writes nothing; a later writable round persists them. If the session can write, it may update only `spartan/tasks/0001-bootstrap-v0-1.md`. It checks:
 
 - English-only persisted artifacts;
 - host-neutral instructions;
@@ -29,18 +29,18 @@ This is the first real dogfood round because the agent starts with cold conversa
 
 Only after the Codex verifier approves, the human opens Claude Code manually. The project-local `.claude/skills/spartan` link exposes the same canonical skill as `/spartan`; the human supplies the English handoff stored in the task file.
 
-Claude acts as `independent-reviewer`, remains read-only, and looks for:
+Claude acts as `independent-reviewer`, remains technically read-only, and looks for:
 
 - assumptions that work only in Codex;
 - ambiguous routing or completion rules;
 - boundary leaks toward runtime behavior;
 - task artifacts that require hidden conversation context.
 
-Claude records `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` in the same task file and returns one next handoff. Claude must not invoke Codex.
+Claude returns `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` in its response, with findings and execution attribution, and writes nothing. A later writable round persists the adopted verdict. Claude must not invoke Codex.
 
 ### Round 4: amend only when required
 
-If the verdict is `CHANGES_REQUESTED`, the human opens a fresh Codex task with that handoff. Codex applies only the accepted findings, validates the package, updates the same task file, and returns it for another read-only review if necessary.
+If the verdict is `CHANGES_REQUESTED`, the human opens a fresh Codex task with a writable persist-and-correct prompt. Codex first persists the adopted verdict, then applies only the accepted findings, validates the package, updates the same task file, and issues one new envelope for another read-only review if necessary.
 
 Do not create an automatic correction loop. The human decides whether each additional round is justified.
 
@@ -60,7 +60,7 @@ The pilot succeeds when:
 
 - a fresh agent continues correctly using only repository state, the skill, and the task file;
 - the same task file works in Codex and Claude Code;
-- every round emits one short English handoff;
+- every writable round emits one short English handoff; a technically read-only review or verifier round returns the structured result instead;
 - the human initiates every host transfer;
 - the task Markdown remains a current snapshot rather than a transcript;
 - no runtime, daemon, nested LLM, queue, lock, credential logic, or background process appears;

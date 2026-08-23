@@ -24,10 +24,10 @@ Keep the protocol static, host-neutral, human-mediated, and repository-local. Do
 
 | Binding | Host | Client context | Model | Effort |
 | --- | --- | --- | --- | --- |
-| planner | Claude Code | personal | claude-opus-5 | high |
-| reviewer.plan | Cursor | personal | cursor-grok-4.6-high-fast | none |
+| planner | Cursor | personal | cursor-grok-4.6-high-fast | high |
+| reviewer.plan | Cursor | personal | claude-opus-5-thinking-high | high |
 | implementer | Cursor | personal | cursor-grok-4.6-high-fast | none |
-| reviewer.implementation | Claude Code | personal | claude-opus-5 | high |
+| reviewer.implementation | Cursor | personal | claude-opus-5-thinking-high | high |
 
 `personal` is an opaque client-context alias. It identifies an externally prepared official-client launch context; it is not a credential, provider account ID, email address, or built-in Bridge account type. Repository content may select this alias but may not define launcher commands, authentication paths, credential variables, tokens, cookies, or API keys.
 
@@ -37,11 +37,34 @@ Each author round and the reviewer round that follows it must use fresh, separat
 
 This section configures this repository as a Spartan Bridge consumer. It changes nothing about the portable protocol, which remains static, host-neutral, and human-mediated. `AGENTS.md` is repository instruction; protocol content lives under `agent-skill/skills/spartan/`. The protocol already allows a handoff to be executed by an external, human-installed tool that it does not depend on, and that is the only authority this section grants.
 
+- The human starts the planner producer phase of a chain; later plan-correction cycles continue inside that same human-started planner session. Each authorized automatic implementation or correction producer uses a fresh mapped execution in the same foreground Bridge run.
 - A human-started Spartan Bridge run may start the mapped reviewer automatically.
-- The Bridge may return findings to the current producer and repeat up to 3 review cycles.
 - This run grants the Bridge `task_artifact_write` only for persisting validated reviewer findings and transition metadata to the explicitly identified current Spartan task artifact.
+- The Bridge may return findings to the current planner session and repeat up to 3 plan-review cycles.
+- After a persisted plan-review pass, the Bridge may return implementation findings to a fresh mapped implementer execution and repeat up to 3 implementation-review cycles.
+- A producer round that received findings from a Spartan Bridge run may start the next review run automatically within the authorized cycle limit.
+- After an automatic implementer correction declaration, the Bridge may start the next implementation review automatically within the authorized implementation-review cycle limit.
+- The Bridge must stop before changing the producer role or producer host, except for the mapped plan-pass implementer transition and its mapped implementation correction executions.
+- After a human-started planner phase and a persisted `reviewer.plan: pass`, the Bridge may start the mapped `implementer`, may start the mapped `reviewer.implementation` after the implementer's declaration, and may return implementation findings to a fresh mapped implementer execution within the independent implementation-review cycle ceiling. Automatic implementation requires an unchanged approved-plan hash and an exclusive worktree lock.
+- A human-started Spartan Bridge run may start the mapped `reviewer.implementation` automatically when the current Spartan task artifact declares the implementer round finished and the reviewer round next; the Bridge takes that declaration as the implementer's assertion that the required checks passed, and does not verify it. That reviewer is given a read-only copy of the working-tree file content admitted by the implementation review scope declared below, excluding only `.git` metadata; repository ignore rules do not classify or remove files, ancestor directories are created only as containers for admitted files, and no repository file path outside that scope appears in the copy or in any other file the reviewer is given.
 
-The grant ends when a reviewer records `APPROVED` or `BLOCKED`, when the three cycles are exhausted, or when applying a finding would broaden the current round's authorization. The Bridge must not start a planner, implementer, or any other non-reviewer role. A human starts every implementation round and remains the only authority for commit, push, tag, pull request, merge, or release. The Bridge writes only the current task artifact named by the run; it does not create tasks, edit other artifacts, or modify files under `agent-skill/`.
+A human remains the only authority for commit, push, tag, pull request, merge, or release. `task_artifact_write` still writes only the current task artifact named by the run; it does not create tasks, edit other artifacts, or modify files under `agent-skill/`. Product-file writes belong to the mapped implementer under the automatic write scope below.
+
+### Automatic implementation write scope
+
+- `agent-skill/`
+- `docs/`
+- `README.md`
+- `spartan/`
+
+### Implementation review scope
+
+- `agent-skill/`
+- `docs/`
+- `README.md`
+- `spartan/`
+- `AGENTS.md`
+- `spartan-bridge/config.yaml`
 
 ## Repository workflow
 

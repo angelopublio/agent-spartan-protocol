@@ -177,7 +177,7 @@ To continue an existing task in either host, reference its exact artifact instea
 ```text
 Open `spartan/tasks/NNNN-<slug>.md`.
 
-Act as the next role recorded in the task, perform its one bounded next action, update the same task file, and return only the next handoff or a completion notice.
+Act as the next role recorded in the task and follow the current Next Handoff. A writable prompt updates the same task file. A read-only prompt returns its verdict and findings in the response and writes nothing.
 ```
 
 The human must start every new host session and manually transfer every handoff. Spartan never opens or invokes another platform.
