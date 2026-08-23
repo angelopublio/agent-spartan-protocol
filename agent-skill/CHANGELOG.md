@@ -2,30 +2,6 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
-## [2.0.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.1.0...v2.0.0) (2026-08-23)
-
-
-### ⚠ BREAKING CHANGES
-
-* **spartan:** the `APPROVE` and `CHANGES` review verdicts are renamed to `APPROVED` and `CHANGES_REQUESTED`. Consumers matching the old literals must accept both spellings.
-
-### Features
-
-* **distribution:** add public install path via marketplace and skills CLI ([74b4ec3](https://github.com/angelopublio/agent-spartan-protocol/commit/74b4ec317937cbeec1cf7c3fddef9254af372b07))
-* **plugin:** move the skill into skills/spartan and set the marketplace display name ([ca86623](https://github.com/angelopublio/agent-spartan-protocol/commit/ca866235f8f77502022815ab0a134e58138159fd))
-* **protocol:** reserve spartan directories and define design material ([c394a8d](https://github.com/angelopublio/agent-spartan-protocol/commit/c394a8d5b4a1bc0df458c3e01e94a66fb51a88da))
-* **release:** add automated release policy ([32b7ccc](https://github.com/angelopublio/agent-spartan-protocol/commit/32b7ccc887c7b86d763c00e8e55a4263de291e6a))
-* **spartan:** add handoff envelope identifier (HX-NNN) ([0943941](https://github.com/angelopublio/agent-spartan-protocol/commit/094394198f7864b15c6a467b12e48911bf8b70ea))
-* **spartan:** name review verdicts by resulting state ([ad1331e](https://github.com/angelopublio/agent-spartan-protocol/commit/ad1331e18582370e21e905b93179a2b00d9a7a5b))
-* **spartan:** split read-only review return from writable persistence ([3c760d8](https://github.com/angelopublio/agent-spartan-protocol/commit/3c760d84453d77e86b5eedfdd50a2dce3f84bfe0))
-
-
-### Bug Fixes
-
-* **spartan:** bind invocation to host capability and add Cursor routing ([9caed4e](https://github.com/angelopublio/agent-spartan-protocol/commit/9caed4eefae05fe031712b8e68773715d4b913f9))
-* **spartan:** bind invocation tokens to hosts ([1214edd](https://github.com/angelopublio/agent-spartan-protocol/commit/1214edd145cc61eb68e9ea3ce6ee9750d43cc11d))
-* **spartan:** correct Cursor invocation and generalize host admission ([eb63ade](https://github.com/angelopublio/agent-spartan-protocol/commit/eb63ade2212f874c06a2a5ac6c1d0bce91a29faa))
-
 ## [1.1.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.0.0...v1.1.0) (2026-08-23)
 
 
