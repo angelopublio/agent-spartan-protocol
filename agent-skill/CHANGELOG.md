@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.1.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.0.0...v1.1.0) (2026-08-23)
+
+
+### Features
+
+* **spartan:** split read-only review return from writable persistence ([3c760d8](https://github.com/angelopublio/agent-spartan-protocol/commit/3c760d84453d77e86b5eedfdd50a2dce3f84bfe0))
+
 ## [1.0.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v0.6.1...v1.0.0) (2026-08-17)
 
 
