@@ -25,9 +25,9 @@ Keep the protocol static, host-neutral, human-mediated, and repository-local. Do
 | Binding | Host | Client context | Model | Effort |
 | --- | --- | --- | --- | --- |
 | planner | Cursor | personal | cursor-grok-4.6-high-fast | high |
-| reviewer.plan | Cursor | personal | claude-opus-5-thinking-high | high |
+| reviewer.plan | Claude Code | personal | claude-opus-5 | high |
 | implementer | Cursor | personal | cursor-grok-4.6-high-fast | none |
-| reviewer.implementation | Cursor | personal | claude-opus-5-thinking-high | high |
+| reviewer.implementation | Claude Code | personal | claude-opus-5 | high |
 
 `personal` is an opaque client-context alias. It identifies an externally prepared official-client launch context; it is not a credential, provider account ID, email address, or built-in Bridge account type. Repository content may select this alias but may not define launcher commands, authentication paths, credential variables, tokens, cookies, or API keys.
 
