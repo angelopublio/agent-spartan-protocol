@@ -87,6 +87,7 @@ Act as reviewer. Review the plan as a whole. Return exactly one APPROVED, CHANGE
 | STEADY | Read-only reviewer consumed `HX-013`; artifact still `handoff_id: HX-012`, `next_handoff_id: HX-013` | Not a stale paste. Documented gap between consumption and persistence. Writable successor adopts `HX-013` once. |
 | AGREE | Any outstanding proposal after a writable regeneration | `next_role`, advisory `- Role:`, prompt `Act as <role>` agree; `next_handoff_id`, advisory `- Handoff:`, prompt `(handoff HX-NNN)` agree; advisory includes `- Permission:` as part of the whole block. |
 | RO-CHECK | Read-only prompt that would have asked for a build or `npm test` that writes | Prompt names only read-only checks. An `EPERM` / `mkdtemp` write failure is not a product defect and is not `BLOCKED`. |
+| PLACEHOLDER | Identified task; PENDING `## Review` section the current producer round is responsible for | Producer writes nothing in `## Review`; body remains the shipped placeholder — `Verdict: PENDING`, `Findings:`, and `- None recorded.` |
 | LEGACY | Artifact `0001` or any identifier-less legacy task; pre-correction `## Review` written by the reviewer itself | No retrofit. Both verdict spellings remain valid historical record. No round rewrites or re-attributes an old `## Review`. |
 
 No row is resolvable two ways. No row requires information outside the artifact and

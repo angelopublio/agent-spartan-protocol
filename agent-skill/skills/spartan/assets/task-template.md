@@ -59,7 +59,7 @@ Verdict: PENDING
 
 Findings:
 
-- None recorded. A writable round persists an adopted verdict here; a technically read-only review returns its verdict in the response and writes nothing.
+- None recorded.
 
 ## Blockers
 
