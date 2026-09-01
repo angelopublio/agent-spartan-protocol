@@ -2,6 +2,13 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.1.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.1.0...v1.1.1) (2026-09-01)
+
+
+### Bug Fixes
+
+* **spartan:** PENDING Review stays the placeholder; phase does not track task_type ([35b1ca4](https://github.com/angelopublio/agent-spartan-protocol/commit/35b1ca49a322189759637dcd49d8230fcf821d1d))
+
 ## [1.1.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.0.0...v1.1.0) (2026-08-23)
 
 
