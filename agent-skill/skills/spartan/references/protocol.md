@@ -247,6 +247,8 @@ The advisory block MUST include `- Permission: read-only | writable` so a reader
 
 A prompt addressed to a read-only round MUST NOT contain `update the same task file`, `record your verdict`, `Return only the next handoff` as a write or envelope instruction, or any build, formatting, code-generation, snapshot, fixture, or install step. It states that the round returns the structured result and changes nothing. It may name only checks the repository proves read-only. A write failure from a check the round could not run is not a product defect and is not grounds for `BLOCKED`.
 
+A prompt for a review, verifier, or arbiter round is the shipped prompt for that role (see [review-persistence.md](review-persistence.md)). The producer MAY add at most one sentence naming what changed since the previous review of the same phase and which findings that change addresses. It MUST NOT add tests to run, checklists, figures to re-run, questions to answer, or other instructions on what to look for: the reviewer decides how to review, and every added instruction is a new place to find fault.
+
 A writable follow-up prompt names one of persist only, correct only, or persist and correct, and never leaves the reader to infer it.
 
 Recommended writable shape:
