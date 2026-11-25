@@ -6,8 +6,8 @@ outcome. Decide from the artifact and the returned result only.
 
 A round is **technically read-only** when its host, session, sandbox, or launcher
 cannot write repository files, and **writable** otherwise. The distinction is not
-the role name. These rows apply to `reviewer`, `independent-reviewer`, and
-`verifier`.
+the role name. These rows apply to `reviewer`, `independent-reviewer`,
+`verifier`, and `arbiter`.
 
 ## Read-only return value
 
@@ -72,6 +72,14 @@ Open `spartan/tasks/NNNN-slug.md` (handoff HX-004).
 Act as reviewer. Review the plan as a whole. Return exactly one APPROVED, CHANGES_REQUESTED, or BLOCKED verdict with findings, evidence, and the host, model, effort, and vendor you actually ran. Change no repository file. Run only checks that write nothing. A write failure from a check you could not run is not a product defect.
 ```
 
+### Shipped arbiter prompt
+
+```text
+Open `spartan/tasks/NNNN-slug.md` (handoff HX-021).
+
+Act as arbiter. The plan review reached its cycle limit without APPROVED. Read the outstanding findings and the corrections made against them, classify each finding as blocking or note, and return exactly one verdict: APPROVED when none is blocking, CHANGES_REQUESTED naming exactly one required change with its success condition, or BLOCKED when a human decision is needed. Do not open a new review. Include the host, model, effort, and vendor you actually ran. Change no repository file. Run only checks that write nothing.
+```
+
 ## Conformance set
 
 | ID | Input | Required outcome |
@@ -89,6 +97,11 @@ Act as reviewer. Review the plan as a whole. Return exactly one APPROVED, CHANGE
 | RO-CHECK | Read-only prompt that would have asked for a build or `npm test` that writes | Prompt names only read-only checks. An `EPERM` / `mkdtemp` write failure is not a product defect and is not `BLOCKED`. |
 | PLACEHOLDER | Identified task; PENDING `## Review` section the current producer round is responsible for | Producer writes nothing in `## Review`; body remains the shipped placeholder — `Verdict: PENDING`, `Findings:`, and `- None recorded.` |
 | LEGACY | Artifact `0001` or any identifier-less legacy task; pre-correction `## Review` written by the reviewer itself | No retrofit. Both verdict spellings remain valid historical record. No round rewrites or re-attributes an old `## Review`. |
+| A-ROUTE | Writable round persists the third plan review, `CHANGES_REQUESTED`, consumed `HX-020`; repository cycle limit 3; repository binds `arbiter.plan` | Successor adopts `HX-020`, transcribes the verdict as adopted, issues `HX-021` for `arbiter` with `Permission: read-only`. With no `arbiter` binding for the phase: `status: blocked`, `next_role: human-operator`, `next_handoff_id: none`, envelope cleared. |
+| A-APPROVED | Plan arbitration, read-only, returns `APPROVED` with two notes, consumed `HX-021`; artifact `handoff_id: HX-020`, `next_handoff_id: HX-021` | Arbiter writes nothing. Persist-only successor adopts `HX-021`, transcribes `APPROVED` and both notes as adopted from the arbiter, issues `HX-022` for `implementer` with `Permission: writable`. |
+| A-CHANGES | Plan arbitration, read-only, returns `CHANGES_REQUESTED` with one required change, consumed `HX-021`; same prior ids | Persist-and-correct successor adopts `HX-021`, transcribes the ruling as adopted, applies the one change, runs the relevant checks, then issues **one** new identifier (`HX-022`) for `implementer`. No further plan review. If the change cannot be applied or a check fails: `status: blocked`, `next_role: human-operator`. |
+| A-IMPL | Implementation arbitration returns `CHANGES_REQUESTED` with one required change, consumed `HX-031` | Persist-and-correct successor adopts `HX-031`, applies the change, runs the relevant checks, and completes the task or issues one new writable envelope for work outside the reviewed phase. No further implementation review. |
+| A-BLOCKED | Any arbitration returns `BLOCKED`, consumed `HX-021` | Persist-only successor adopts `HX-021`, transcribes `BLOCKED` as adopted, sets `status: blocked`, `next_role: human-operator`, `next_handoff_id: none`, clears the envelope. |
 
 No row is resolvable two ways. No row requires information outside the artifact and
 the returned result.
@@ -105,3 +118,5 @@ the returned result.
 - [ ] Four-way role and identifier agreement plus `- Permission:` hold on every
       outstanding proposal.
 - [ ] The shipped read-only prompt contains none of the forbidden write lines.
+- [ ] Every A-* row ends its phase: approval, one applied change, or `human-operator`;
+      no row returns an arbitrated phase to another review.
