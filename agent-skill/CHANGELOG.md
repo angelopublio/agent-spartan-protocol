@@ -2,6 +2,14 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.2.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.1.1...v1.2.0) (2026-11-25)
+
+
+### Features
+
+* **spartan:** add arbiter role and review convergence rules ([16a6bf1](https://github.com/angelopublio/agent-spartan-protocol/commit/16a6bf1a0876707df95f5f02858b5ae37190d23f))
+* **spartan:** add arbiter role and review convergence rules ([860e1b6](https://github.com/angelopublio/agent-spartan-protocol/commit/860e1b6139a52e629d962b255a97ad565166076c))
+
 ## [1.1.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.1.0...v1.1.1) (2026-09-01)
 
 
