@@ -29,6 +29,7 @@ When uncertain between two levels, choose the higher level and record why. Risk 
 - `reviewer`: evaluates work with an explicit verdict.
 - `independent-reviewer`: reviews from fresh context, preferably in another vendor when independence is materially valuable.
 - `verifier`: confirms acceptance criteria and evidence without redesigning the work.
+- `arbiter`: settles a review loop that ended without agreement, classifying the outstanding findings and returning one verdict (see Convergence and arbitration in `protocol.md`).
 
 ## Recommended routes
 
@@ -39,6 +40,7 @@ When uncertain between two levels, choose the higher level and record why. Risk 
 | Architecture or broad-impact decision | Planner, implementer, independent-reviewer, verifier as needed |
 | Security, authentication, authorization, or migration | Planning plus independent review; cross-vendor review is preferred when available |
 | Read-only investigation | Investigator in the current host; add a second review only for material uncertainty |
+| Review loop reached its cycle limit, or two reviews in a row hit the same decision | `arbiter` when the repository binds one for that phase, preferably from a vendor independent of producer and reviewer; otherwise `human-operator` |
 | Missing human decision or authority | `blocked` with `human-operator` as next role |
 
 Do not require cross-vendor review for every task. Coordination cost must be justified by risk, uncertainty, or the value of independent judgment.

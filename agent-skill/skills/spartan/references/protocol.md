@@ -72,7 +72,7 @@ Controlled values:
 - `phase`: `investigating`, `planning`, `implementing`, `reviewing`, `verifying`, `complete`
 - `task_type`: `investigation`, `planning`, `implementation`, `review`, `verification`
 - `risk`: `routine`, `material`, `high-impact`
-- roles: `human-operator`, `investigator`, `planner`, `implementer`, `reviewer`, `independent-reviewer`, `verifier`
+- roles: `human-operator`, `investigator`, `planner`, `implementer`, `reviewer`, `independent-reviewer`, `verifier`, `arbiter`
 - verdict: `PENDING`, `APPROVED`, `CHANGES_REQUESTED`, `BLOCKED`
 
 Artifacts created before this version use the earlier `APPROVE` and `CHANGES` spellings. Those artifacts remain valid as historical record, and a reader MUST accept both spellings.
@@ -191,6 +191,24 @@ A producer round MUST NOT write into a `## Review` section it is responsible for
 A reviewer SHOULD remain read-only unless the human explicitly authorizes changes for that round. That sentence is review discipline, not a write prohibition that conflicts with persistence. A fresh-context or cross-vendor review is advisory independence, not a technically enforced guarantee.
 
 An independent review SHOULD run in a different host - and preferably a different vendor - than the one that produced or last modified the work under review, because a host reviewing its own output shares its blind spots. The same preference applies to a re-review after fixes: prefer a host other than the one that applied them. This preference is advisory; the human chooses the host and MAY override it.
+
+### Convergence and arbitration
+
+A review loop exists to converge on work that meets its goal, not to exhaust every observation.
+
+- A finding is **blocking** when it would change what the producer builds or would leave an acceptance criterion unverifiable. Every other finding is a **note**. A reviewer labels each finding as one or the other. Notes are persisted with the adopted review and shown to the human; notes alone MUST NOT withhold `APPROVED`.
+- From the second review of the same phase on, a reviewer checks whether each earlier blocking finding is resolved and whether its correction broke anything else. A new finding in text or code the correction did not touch is reported only when it is blocking.
+- A correction round fixes a finding by deleting or tightening the text or code the finding names before adding any. When a fix must add a decision, criterion, or mechanism, the round says why.
+
+When a phase's review loop ends without `APPROVED` because the repository's cycle limit for that phase is reached, or because two consecutive reviews of that phase return blocking findings on the same decision, the next role is `arbiter` when the repository's instructions bind one for that phase, and `human-operator` otherwise.
+
+An `arbiter` round settles that loop from fresh context. It reads the artifact, the outstanding findings, and the corrections made against them; it classifies every outstanding finding as blocking or note; and it returns exactly one verdict:
+
+- `APPROVED`: no outstanding finding is blocking. The phase advances as it would after a reviewer's `APPROVED`, with the notes persisted.
+- `CHANGES_REQUESTED`: exactly one required change, stated with its success condition. The persisting round applies that change, runs the relevant checks, and the phase then advances without another review of that phase. If the change cannot be applied or a check fails, the task becomes `blocked` with `human-operator` next.
+- `BLOCKED`: the outstanding findings need a human decision. The task becomes `blocked` with `human-operator` next.
+
+An arbiter rules on the outstanding findings; it does not open a new review. It MAY add a finding only when that finding is blocking and lies in work the loop already covered. An arbiter round follows the same read-only return-value and persistence rules as a review round. Its execution SHOULD come from a vendor independent of both the producer and the reviewer of that phase; when it cannot, the round records why.
 
 A task MAY become `completed` only when:
 

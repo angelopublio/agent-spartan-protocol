@@ -7,7 +7,7 @@ description: Coordinate portable, human-mediated software-task handoffs through 
 
 Coordinate information, not processes. Work in the currently authenticated host, preserve the continuation state in one task file, and give the human one concise English handoff when another round is needed.
 
-Read [references/protocol.md](references/protocol.md) before acting. Read [references/routing.md](references/routing.md) before assigning risk, the current role, or the next role. Read [references/review-persistence.md](references/review-persistence.md) when the round is a review or verifier, or when issuing a prompt whose permission shape matters. When creating the `spartan/` directory for the first time in a target repository, also copy [assets/spartan-readme.md](assets/spartan-readme.md) to `spartan/README.md`. When creating the repository's first Spartan task, if the target repository root contains neither `AGENTS.md` nor `CLAUDE.md`, append one advisory line recommending that the human create an `AGENTS.md` covering stack, dev/build/lint/test commands, and conventions plus a minimal `CLAUDE.md` that points to it; create no file outside `spartan/`, and add no marker, suppression file, or task-artifact status field. When creating a task, copy [assets/task-template.md](assets/task-template.md) to `spartan/tasks/NNNN-<slug>.md`, assign the next unused four-digit creation number, and replace every placeholder.
+Read [references/protocol.md](references/protocol.md) before acting. Read [references/routing.md](references/routing.md) before assigning risk, the current role, or the next role. Read [references/review-persistence.md](references/review-persistence.md) when the round is a review, verifier, or arbiter, or when issuing a prompt whose permission shape matters. When creating the `spartan/` directory for the first time in a target repository, also copy [assets/spartan-readme.md](assets/spartan-readme.md) to `spartan/README.md`. When creating the repository's first Spartan task, if the target repository root contains neither `AGENTS.md` nor `CLAUDE.md`, append one advisory line recommending that the human create an `AGENTS.md` covering stack, dev/build/lint/test commands, and conventions plus a minimal `CLAUDE.md` that points to it; create no file outside `spartan/`, and add no marker, suppression file, or task-artifact status field. When creating a task, copy [assets/task-template.md](assets/task-template.md) to `spartan/tasks/NNNN-<slug>.md`, assign the next unused four-digit creation number, and replace every placeholder.
 
 ## Hard boundary
 
@@ -33,7 +33,7 @@ The current host may inspect files, edit code, run commands, and use ordinary to
    - an adopted review verdict when persisting a reviewer's return value;
    - exactly one next action.
    If the round is technically read-only, return the structured result (verdict, findings, evidence, execution attribution) and write nothing.
-7. If the round is writable, end with either one handoff or a completion notice. A technically read-only review or verifier round is complete when it returns the structured result; it does not issue a persisted envelope.
+7. If the round is writable, end with either one handoff or a completion notice. A technically read-only review, verifier, or arbiter round is complete when it returns the structured result; it does not issue a persisted envelope.
 
 ## Preserve the two authorities
 
@@ -45,7 +45,7 @@ Do not turn the task file into a transcript, append-only event log, database, le
 
 ## Review and completion
 
-Use only `PENDING`, `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` as review verdicts. A review or verifier round must produce and return exactly one explicit verdict. A technically read-only round satisfies that obligation in its response and writes nothing; the next writable round persists the adopted result and advances the envelope once. Reviewers SHOULD remain read-only as discipline unless the user expressly authorizes changes. See [review-persistence.md](references/review-persistence.md).
+Use only `PENDING`, `APPROVED`, `CHANGES_REQUESTED`, or `BLOCKED` as review verdicts. A review, verifier, or arbiter round must produce and return exactly one explicit verdict. A reviewer labels each finding blocking or note, and notes alone never withhold `APPROVED`; a loop that does not converge goes to `arbiter` or `human-operator` (see Convergence and arbitration in the protocol). A technically read-only round satisfies that obligation in its response and writes nothing; the next writable round persists the adopted result and advances the envelope once. Reviewers SHOULD remain read-only as discipline unless the user expressly authorizes changes. See [review-persistence.md](references/review-persistence.md).
 
 Mark a task `completed` only when its acceptance criteria are satisfied, relevant checks have recorded outcomes, required review is approved, and no blocker remains. Otherwise leave it `active` or `blocked` and produce the next handoff.
 
