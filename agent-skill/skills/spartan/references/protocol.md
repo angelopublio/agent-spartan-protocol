@@ -97,6 +97,14 @@ Stale detail SHOULD be compacted when it no longer helps the next round. Evidenc
 
 The artifact MUST NOT contain credentials, tokens, private keys, session material, or unnecessary personal data. When evidence could expose sensitive content, record a safe description and the outcome instead.
 
+### Plan scope
+
+A plan describes the work; it does not do it.
+
+- The Objective states the goal in one sentence, together with the smallest deliverable that meets it. Decisions cover only choices the implementer cannot make alone; everything else is left to the implementer.
+- A plan MUST NOT pre-compute the work. Figures measured from data, such as counts, sizes, or totals, are produced during implementation by a committed script or a recorded command that the implementation review can re-run. Neither a decision nor an acceptance criterion asserts a measured figure. A figure the human supplies is an input and MAY appear in the decision that uses it.
+- Observations outside the task's goal, such as design, navigation, content quality, or tooling, go to the `## Notes for the human` section. They never become decisions, criteria, or blocking findings.
+
 ## Repository layout
 
 Spartan writes only under `spartan/` in the target repository, except for the one explicitly
@@ -246,6 +254,8 @@ The invocation style MUST match what the recommended host supports, determined b
 The advisory block MUST include `- Permission: read-only | writable` so a reader can tell which shape the prompt assumes. Inferring permission from the role name is not allowed.
 
 A prompt addressed to a read-only round MUST NOT contain `update the same task file`, `record your verdict`, `Return only the next handoff` as a write or envelope instruction, or any build, formatting, code-generation, snapshot, fixture, or install step. It states that the round returns the structured result and changes nothing. It may name only checks the repository proves read-only. A write failure from a check the round could not run is not a product defect and is not grounds for `BLOCKED`.
+
+A prompt for a review, verifier, or arbiter round is the shipped prompt for that role (see [review-persistence.md](review-persistence.md)). The producer MAY add at most one sentence naming what changed since the previous review of the same phase and which findings that change addresses. It MUST NOT add tests to run, checklists, figures to re-run, questions to answer, or other instructions on what to look for: the reviewer decides how to review, and every added instruction is a new place to find fault.
 
 A writable follow-up prompt names one of persist only, correct only, or persist and correct, and never leaves the reader to infer it.
 

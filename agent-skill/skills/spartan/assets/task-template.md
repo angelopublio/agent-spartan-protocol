@@ -61,6 +61,10 @@ Findings:
 
 - None recorded.
 
+## Notes for the human
+
+None.
+
 ## Blockers
 
 None.
