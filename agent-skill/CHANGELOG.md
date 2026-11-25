@@ -2,6 +2,19 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.3.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.2.0...v1.3.0) (2026-11-25)
+
+
+### Features
+
+* **spartan:** add plan scope rules and a Notes for the human section ([e9963b1](https://github.com/angelopublio/agent-spartan-protocol/commit/e9963b1769abbb20b58dbcea03402e04ddb6395b))
+* **spartan:** standard review prompts and plan scope rules ([4eb6985](https://github.com/angelopublio/agent-spartan-protocol/commit/4eb6985b2b067d742160521e054274337a34aa83))
+
+
+### Bug Fixes
+
+* **spartan:** keep review prompts to the shipped prompt ([da61117](https://github.com/angelopublio/agent-spartan-protocol/commit/da61117cd64c15b718bd5cf0db00932fd7732df8))
+
 ## [1.2.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.1.1...v1.2.0) (2026-11-25)
 
 
