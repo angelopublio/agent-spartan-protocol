@@ -72,7 +72,7 @@ Run the relevant repository checks and update the same task file.
 Return only the next handoff, or a completion notice if no work remains.
 ```
 
-A read-only prompt uses `- Permission: read-only`, omits every file-writing line, and asks the round to return the structured result. Do not generate `update the same task file` for a read-only round. A review, verifier, or arbiter prompt is the shipped prompt for that role plus at most one sentence on what changed since the previous review; never add tests, checklists, figures to re-run, or instructions on what to look for.
+A read-only prompt uses `- Permission: read-only`, omits every file-writing line, and asks the round to return the structured result. Do not generate `update the same task file` for a read-only round. A plan states its goal in one sentence, never pre-computes measured figures, and sends observations outside its goal to `## Notes for the human` (see Plan scope in the protocol). A review, verifier, or arbiter prompt is the shipped prompt for that role plus at most one sentence on what changed since the previous review; never add tests, checklists, figures to re-run, or instructions on what to look for.
 
 The invocation must match what the recommended host actually supports, not its name. Use the host's own skill token when it has one: `$spartan` for Codex, `/spartan` for Cursor, and `/spartan` for Claude Code (`/spartan:spartan` when installed as a plugin). When the host discovers skills from `SKILL.md` but exposes no invocation token, name the skill in the prompt instead. Only a host without skill support gets the direct prompt. Never pair a host with another host's token.
 

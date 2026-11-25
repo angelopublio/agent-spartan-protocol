@@ -97,6 +97,14 @@ Stale detail SHOULD be compacted when it no longer helps the next round. Evidenc
 
 The artifact MUST NOT contain credentials, tokens, private keys, session material, or unnecessary personal data. When evidence could expose sensitive content, record a safe description and the outcome instead.
 
+### Plan scope
+
+A plan describes the work; it does not do it.
+
+- The Objective states the goal in one sentence, together with the smallest deliverable that meets it. Decisions cover only choices the implementer cannot make alone; everything else is left to the implementer.
+- A plan MUST NOT pre-compute the work. Figures measured from data, such as counts, sizes, or totals, are produced during implementation by a committed script or a recorded command that the implementation review can re-run. Neither a decision nor an acceptance criterion asserts a measured figure. A figure the human supplies is an input and MAY appear in the decision that uses it.
+- Observations outside the task's goal, such as design, navigation, content quality, or tooling, go to the `## Notes for the human` section. They never become decisions, criteria, or blocking findings.
+
 ## Repository layout
 
 Spartan writes only under `spartan/` in the target repository, except for the one explicitly
