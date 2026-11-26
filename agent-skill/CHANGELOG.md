@@ -2,6 +2,14 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.3.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.3.0...v1.3.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* state that HX- is the literal handoff identifier prefix ([70d94b5](https://github.com/angelopublio/agent-spartan-protocol/commit/70d94b52cdf242d5b061cb89eb1d864596d51f53))
+* state that HX- is the literal handoff identifier prefix ([03e6e7a](https://github.com/angelopublio/agent-spartan-protocol/commit/03e6e7ac745f2f3b610178c32b86e593df9871a8))
+
 ## [1.3.0](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.2.0...v1.3.0) (2026-11-25)
 
 
