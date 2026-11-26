@@ -2,6 +2,14 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.3.2](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.3.1...v1.3.2) (2026-11-26)
+
+
+### Bug Fixes
+
+* point the literal-prefix sentences at the canonical identifier form ([3cf896c](https://github.com/angelopublio/agent-spartan-protocol/commit/3cf896c9b6a8b0b82bb1d8a44c2e7cfa20d56ec6))
+* point the literal-prefix sentences at the canonical identifier form ([ac41929](https://github.com/angelopublio/agent-spartan-protocol/commit/ac419293a5729f5cb925e23a10df04df1da2a78a))
+
 ## [1.3.1](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.3.0...v1.3.1) (2026-11-26)
 
 
