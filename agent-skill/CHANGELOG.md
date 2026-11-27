@@ -2,6 +2,14 @@
 
 All notable changes to the Spartan skill package will be documented in this file.
 
+## [1.3.3](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.3.2...v1.3.3) (2026-11-27)
+
+
+### Bug Fixes
+
+* resolve the skill's references beside the loaded SKILL.md ([e68514d](https://github.com/angelopublio/agent-spartan-protocol/commit/e68514d743891022c49452c7427fd2f97bada1e3))
+* resolve the skill's references beside the loaded SKILL.md ([ace65af](https://github.com/angelopublio/agent-spartan-protocol/commit/ace65af521d787533cbb7eba2de77f17e2cb6ec7))
+
 ## [1.3.2](https://github.com/angelopublio/agent-spartan-protocol/compare/v1.3.1...v1.3.2) (2026-11-26)
 
 
